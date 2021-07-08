@@ -1,0 +1,22 @@
+Package: ordPens
+Type: Package
+Title: Selection, Fusion, Smoothing and Principal Components Analysis for Ordinal Variables 
+Version: 0.4.0
+Date: 2020-08-18
+Authors@R: c(
+    person("Jan", "Gertheiss", email = "jan.gertheiss@hsu-hh.de", role = "aut"),
+    person("Aisouda", "Hoshiyar", email = "aisouda.hoshiyar@hsu-hh.de", role = c("aut","cre")),
+    person("Fabian", "Scheipl", email = "fabian.scheipl@stat.uni-muenchen.de", role = "ctb"))  
+Description: Selection, fusion, and/or smoothing of ordinally scaled independent variables using a group lasso, fused lasso or generalized ridge penalty, as well as non-linear principal components analysis for ordinal variables using a second-order difference/smoothing penalty.
+Depends: grplasso, mgcv, RLRsim, quadprog, glmpath 
+biocViews:  
+Suggests: 
+  psy 
+License: GPL-2
+LazyLoad: yes
+NeedsCompilation: no
+Packaged: 2021-06-11 14:03:45 UTC; jgerthe_2
+Repository: CRAN 
+Additional_repositories: https://www.bioconductor.org
+Date/Publication: 2015-05-21 16:38:36
+
