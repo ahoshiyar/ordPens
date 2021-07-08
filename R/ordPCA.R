@@ -1,6 +1,6 @@
 ordPCA <- function(H, p, lambda = c(1), maxit = 100, crit = 1e-7,  
                     Qstart = NULL, Ks = apply(H,2,max), constr = rep(FALSE, ncol(H)),
-                    CV = FALSE, k = 10, CVsupress = TRUE){ 
+                    CV = FALSE, k = 5, CVsupress = TRUE){ 
   
    
      
