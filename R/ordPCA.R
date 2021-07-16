@@ -1,21 +1,21 @@
 ordPCA <- function(H, p, lambda = c(1), maxit = 100, crit = 1e-7,  
                     Qstart = NULL, Ks = apply(H,2,max), constr = rep(FALSE, ncol(H)),
-                    CV = FALSE, k = 10, CVsupress = TRUE){ 
+                    CV = FALSE, k = 5, CVfit = FALSE){ 
   
    
      
   
-  if(length(lambda) > 5 & CVsupress == FALSE){
+  if(length(lambda) > 5 & CVfit == TRUE){
     ask <- askYesNo("Lists of undesireably high dimensions will be produced. Do you want to proceed?", 
                     prompts = getOption("askYesNo", gettext(c("Yes", "No", "Cancel")))
     ) 
     if(!is.na(ask) & ask == TRUE){
-      CVsupress <- FALSE
       warning("Lists of undesireably high dimensions will be produced")
+      CVfit <- TRUE
     }else if(is.na(ask)){
       stop("calculation canceled", call. = FALSE)
     }else{
-      CVsupress <- TRUE
+      CVfit <- FALSE
       message("VAF computed only")
     } 
   } 
@@ -132,7 +132,7 @@ ordPCA <- function(H, p, lambda = c(1), maxit = 100, crit = 1e-7,
       
     }else if(length(lambda) > 1){
       
-      if(CVsupress){
+      if(!CVfit){
         
         TVAFtrain <- matrix(NA,k,length(lambda))
         TVAFtest <- matrix(NA,k,length(lambda))
@@ -189,7 +189,7 @@ ordPCA <- function(H, p, lambda = c(1), maxit = 100, crit = 1e-7,
         out <- list("qs" = NULL, "Q" = NULL, "X" = NULL, "A" = NULL, "iter" = NULL, 
                     "pca" = NULL, "VAFtrain" = VAFtrain, "VAFtest" = VAFtest) 
         
-      }else if(!CVsupress){
+      }else if(CVfit){
         
         TVAFtrain <- matrix(NA,k,length(lambda))
         TVAFtest <- matrix(NA,k,length(lambda))

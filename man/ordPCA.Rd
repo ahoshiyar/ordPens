@@ -11,7 +11,7 @@
 \usage{
 ordPCA(H, p, lambda = c(1), maxit = 100, crit = 1e-7,
        Qstart = NULL, Ks = apply(H,2,max), constr = rep(FALSE, ncol(H)),
-       CV = FALSE, k = 10, CVsupress = TRUE)
+       CV = FALSE, k = 5, CVfit = FALSE)
 } 
 
 \arguments{
@@ -28,8 +28,8 @@ ordPCA(H, p, lambda = c(1), maxit = 100, crit = 1e-7,
   \item{CV}{a logical value indicating whether k-fold cross-validation should be performed in order to evaluate the
   performance and/or select an optimal smoothing parameter.}
   \item{k}{the number of folds to be specified; only if \code{CV} is set to \code{TRUE}.}
-  \item{CVsupress}{logical; to be specified only if \code{CV = TRUE} and \code{lambda} a vector of length > 5;
-  if TRUE, only VAF values are provided (recommended); else, also lists of matrices of PCA results are produced           .} 
+  \item{CVfit}{logical; to be specified only if \code{CV = TRUE}. If \code{CVfit = TRUE} and \code{lambda} is a vector of length > 5, additional yes/no dialog appears;
+  if \code{FALSE}, only VAF values are provided (recommended); else, also lists of matrices of PCA results are produced.} 
   
 }
 
@@ -100,7 +100,7 @@ lines(icf_pca1$qs[[55]][,3], type = "b", col = 3, lty = 3, pch = 3, lwd=2)
 icf_pca2 <- ordPCA(H, p = 2, lambda = c(0.0001, 1, 10), maxit = 1000, 
                    Ks = c(rep(5, 50), rep(9, 16), 5), 
                    constr = c(rep(TRUE, 50), rep(FALSE, 16), TRUE),
-                   CV = TRUE, k = 5, CVsupress = FALSE)
+                   CV = TRUE, k = 5, CVfit = TRUE)
 icf_pca2$VAFtest
 
 ## load ehd data 
@@ -113,7 +113,7 @@ H <- ehd + 1
 # nonlinear PCA
 ehd1 <- ordPCA(H, p = 5, lambda = 1, maxit = 100,
                constr = rep(TRUE,ncol(H)),
-               CV = FALSE, CVsupress = TRUE)
+               CV = FALSE)
 
 # resulting PCA on the scaled variables
 summary(ehd1$pca)
@@ -130,7 +130,7 @@ lambda <- 10^seq(4,-4, by = -0.1)
 set.seed(456)
 cvResult <- ordPCA(H, p = 5, lambda = lambda, maxit = 100,
                     constr = rep(TRUE,ncol(H)),
-                    CV = TRUE, k = 5)
+                    CV = TRUE, k = 5, CVfit = FALSE)
 # optimal lambda                    
 lambda[which.max(cvResult$VAFtest)]
 }
