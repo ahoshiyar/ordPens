@@ -18,7 +18,7 @@ genRidge(x, y, offset, omega, lambda, model, delta=1e-6, maxit=25)
 ordAOV1(x, y, type, nsim, null.sample, ...)
 ordAOV2(x, y, type, nsim, null.sample, ...)
 crO(k, d=2)
-penALS(H, p, lambda, Qstart, crit, maxit, Ks, constr)
+penALS(H, p, lambda, qstart, crit, maxit, Ks, constr)
 
 \method{smooth.construct}{ordinal.smooth.spec}(object, data, knots)
 \method{Predict.matrix}{ordinal.smooth}(object, data)

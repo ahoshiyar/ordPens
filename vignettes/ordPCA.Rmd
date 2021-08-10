@@ -64,8 +64,8 @@ In addition, the function provides the option of both non-monotone effects and i
 #### One dimensional estimation
 Let’s start with the most basic example with univariate penalty, i.e. `lambda` being a scalar. We extract 5 principal components, specified by the argument `p`.
 ```{r} 
-ehd_pca1 <- ordPCA(H, p = 5, lambda = 1, maxit = 100, crit = 1e-7,
-                   Qstart = NULL, Ks = apply(H, 2, max), constr = rep(TRUE, ncol(H)),
+ehd_pca1 <- ordPCA(H, p = 5, lambda = 0.5, maxit = 100, crit = 1e-7,
+                   qstart = NULL, Ks = apply(H, 2, max), constr = rep(TRUE, ncol(H)),
                    CV = FALSE, k = 5, CVfit = FALSE)
 ```
 
@@ -88,10 +88,11 @@ plot(1:5, ehd_pca1$qs[[2]], type = "b", xlab = "category", ylab = "quantificatio
 
 #### Comparison of different penalty parameter values
 
-We can apply the function for different values of the penalty parameter. As we specify `lambda` as a vector, the output will result in a list of multivariate matrices.
+We can apply the function for different values of the penalty parameter. As we specify `lambda` as a (decreasing) vector, the output will result in a list of multivariate matrices. Note that optimization starts with the first component of lambda. Thus, if lambda is not in decreasing order, the vector will be sorted internally and so will be corresponding results.
+
 ```{r}
-ehd_pca2 <- ordPCA(H, p = 5, lambda = c(0, 1, 10), maxit = 100, crit = 1e-7,
-                   Qstart = NULL, Ks = apply(H, 2, max), constr = rep(TRUE, ncol(H)),
+ehd_pca2 <- ordPCA(H, p = 5, lambda = c(5, 0.5, 0), maxit = 100, crit = 1e-7,
+                   qstart = NULL, Ks = apply(H, 2, max), constr = rep(TRUE, ncol(H)),
                    CV = FALSE)
 ```
 
@@ -107,11 +108,10 @@ ehd_pca2$qs[[2]]
 
 With an increasing penalty parameter, quantifications become increasingly linear:
 ```{r, fig.align="center"}
-plot(ehd_pca2$qs[[2]][,1], type = "b", xlab = "category", ylab = "quantification", col = 1, 
-     ylim = range(c(ehd_pca2$qs[[2]][,1]), ehd_pca2$qs[[2]][,2], ehd_pca2$qs[[2]][,3]), 
-     main = colnames(H)[2], bty = "n")
+plot(ehd_pca2$qs[[2]][,3], type = "b", xlab = "category", ylab = "quantification", col = 1, 
+     ylim = range(ehd_pca2$qs[[2]]), main = colnames(H)[2], bty = "n")
 lines(ehd_pca2$qs[[2]][,2], type = "b", col = 2, lty = 2, pch = 2, lwd=2)
-lines(ehd_pca2$qs[[2]][,3], type = "b", col = 3, lty = 3, pch = 3, lwd=2)
+lines(ehd_pca2$qs[[2]][,1], type = "b", col = 3, lty = 3, pch = 3, lwd=2)
 ```
 
 Visualizing some variables:
@@ -119,21 +119,21 @@ Visualizing some variables:
 par(mar = c(4.1, 4.1, 3.1, 1.1))
 
 for(j in c(1, 9, 12, 13, 15, 19)){ 
-  plot(ehd_pca2$qs[[j]][,1], type = "b", main = colnames(H)[j], xlab = "category", 
+  plot(ehd_pca2$qs[[j]][,3], type = "b", main = colnames(H)[j], xlab = "category", 
        ylab = "quantification", lwd = 2, bty = "n") 
   lines(ehd_pca2$qs[[j]][,2], type = "b", col = 2, lty = 2, pch = 2, lwd = 2)
-  lines(ehd_pca2$qs[[j]][,3], type = "b", col = 3, lty = 3, pch = 3, lwd = 2)
+  lines(ehd_pca2$qs[[j]][,1], type = "b", col = 3, lty = 3, pch = 3, lwd = 2)
 } 
 ```
 
 
 
 #### Comparison of VAF for different penalties
-We can also compare different amounts of penalization by means of variance acounted for (VAF) for performance evaluation by setting `CV = TRUE` and specifying the number of folds `k`. Use `CVfit = TRUE` to perform both k-fold cross validation and estimation (which, however, can be time-consuming if lambda has many elements). 
+We can also compare different amounts of penalization by means of variance accounted for (VAF) for performance evaluation by setting `CV = TRUE` and specifying the number of folds `k`. The resulting output is a matrix with columns corresponding to `lambda` and rows corresponding to the folds `k`. Use `CVfit = TRUE` to perform both k-fold cross validation and estimation (which, however, can be time-consuming if lambda has many elements). 
 ```{r}
-ehd_pca3 <- ordPCA(H, p = 5, lambda = c(0.1, 1, 10), maxit = 100, crit = 1e-7,
-                   Qstart = NULL, Ks = apply(H, 2, max), constr = rep(TRUE, ncol(H)),
-                   CV = TRUE, k = 5, CVfit = TRUE)
+ehd_pca3 <- ordPCA(H, p = 5, lambda = c(5, 0.5, 0.001), maxit = 100, crit = 1e-7,
+                   qstart = NULL, Ks = apply(H, 2, max), constr = rep(TRUE, ncol(H)),
+                   CV = TRUE, k = 5)
 
 ehd_pca3$VAFtest
 ```
@@ -145,21 +145,21 @@ In addiction, the function provides the option of both non-monotone effects and 
 lambda <- 10^seq(4, -4, by = -0.1)
 set.seed(456)
 ehd_pca4 <- ordPCA(H, p = 5, lambda = lambda, maxit = 100, crit = 1e-7,
-                   Qstart = NULL, Ks = apply(H, 2, max), constr = rep(TRUE, ncol(H)),
+                   qstart = NULL, Ks = apply(H, 2, max), constr = rep(TRUE, ncol(H)),
                    CV = TRUE, k = 5, CVfit = FALSE)
 
 ehd_pca4$VAFtest
 ```
 
-The optimal $\lambda$ can then be determined by the value maximizing the cross-validated VAF on the validation set:
+The optimal $\lambda$ can then be determined by the value maximizing the cross-validated VAF on the validation set, averaged over folds:
 ```{r test, figures-side, fig.show="hold", fig.width = 5, fig.height = 5, out.width="45%",out.height="50%"}  
-plot(log10(lambda), ehd_pca4$VAFtrain, type = "l",
+plot(log10(lambda), apply(ehd_pca4$VAFtrain,2,mean), type = "l",
      xlab = expression(log[10](lambda)), ylab = "proportion of variance explained",
      main = "training data", cex.axis = 1.2, cex.lab = 1.2, cex.main = 1.4)
-plot(log10(lambda), ehd_pca4$VAFtest, type = "l",
+plot(log10(lambda), apply(ehd_pca4$VAFtest,2,mean), type = "l",
      xlab = expression(log[10](lambda)), ylab = "proportion of variance explained",
      main = "validation data", cex.axis = 1.2, cex.lab = 1.2, cex.main = 1.4)
-abline(v = log10(lambda)[which.max(ehd_pca4$VAFtest)])
+abline(v = log10(lambda)[which.max(apply(ehd_pca4$VAFtest,2,mean))])
 ```
 
  
@@ -185,27 +185,25 @@ For the environmental factors from the ICF, in particular, also non-monotone tra
 
 We can simply specify for which variables a monotonicity constraint is to be applied by the logical argument `constr`. Indeed, non-monotonicity is detected for the environmental factors (prefix 'e'):
 ```{r test_environment, figures-side, fig.show="hold", fig.width = 5, fig.height = 5, out.width="45%",out.height="50%"} 
-icf_pca1 <- ordPCA(H, p = 2, lambda = c(0.1, 1 ,10), maxit = 100, crit = 1e-7, Qstart = NULL, 
+icf_pca1 <- ordPCA(H, p = 2, lambda = c(5, 0.5, 0.001), maxit = 100, crit = 1e-7, qstart = NULL, 
                    Ks = c(rep(5,50), rep(9,16), 5), 
                    constr = c(rep(TRUE,50), rep(FALSE,16), TRUE), 
                    CV = FALSE, k = 5, CVfit = FALSE) 
  
-icf_pca1C <- ordPCA(H, p = 2, lambda = c(0.1, 1, 10), maxit = 100, crit = 1e-7, Qstart = NULL, 
+icf_pca1C <- ordPCA(H, p = 2, lambda = c(5, 0.5, 0.001), maxit = 100, crit = 1e-7, qstart = NULL, 
                     Ks = c(rep(5,50), rep(9,16), 5), constr = rep(TRUE, ncol(H)), 
                     CV = FALSE, k = 5, CVfit = FALSE) 
 
-plot(icf_pca1$qs[[51]][,1], type = "b", xlab = "category", ylab = "quantification", col = 1, 
-     ylim = range(c(icf_pca1$qs[[51]][,1], icf_pca1$qs[[51]][,2], icf_pca1$qs[[51]][,3])), 
-     main = xnames[51], bty = "n", xaxt = "n") 
+plot(icf_pca1$qs[[51]][,3], type = "b", xlab = "category", ylab = "quantification", col = 1, 
+     ylim = range(icf_pca1$qs[[51]]), main = xnames[51], bty = "n", xaxt = "n") 
 lines(icf_pca1$qs[[51]][,2], type = "b", col = 2, lty = 2, pch = 2, lwd=2)
-lines(icf_pca1$qs[[51]][,3], type = "b", col = 3, lty = 3, pch = 3, lwd=2)
+lines(icf_pca1$qs[[51]][,1], type = "b", col = 3, lty = 3, pch = 3, lwd=2)
 axis(1, at = 1:length(icf_pca1$qs[[51]][,1]), labels = -4:4)   
 
-plot(icf_pca1C$qs[[51]][,1], type = "b", xlab = "category", ylab = "quantification", col = 1, 
-     ylim = range(c(icf_pca1C$qs[[55]][,1], icf_pca1C$qs[[51]][,2], icf_pca1C$qs[[51]][,3])), 
-     main = xnames[51], bty = "n", xaxt = "n")  
+plot(icf_pca1C$qs[[51]][,3], type = "b", xlab = "category", ylab = "quantification", col = 1, 
+     ylim = range(icf_pca1C$qs[[51]]), main = xnames[51], bty = "n", xaxt = "n")  
 lines(icf_pca1C$qs[[51]][,2], type = "b", col = 2, lty = 2, pch = 2, lwd=2)
-lines(icf_pca1C$qs[[51]][,3], type = "b", col = 3, lty = 3, pch = 3, lwd=2)
+lines(icf_pca1C$qs[[51]][,1], type = "b", col = 3, lty = 3, pch = 3, lwd=2)
 axis(1, at = 1:length(icf_pca1C$qs[[51]][,1]), labels = -4:4)   
 ```
 
@@ -227,11 +225,10 @@ xmain[wx] <- list("Touch function",
 
 par(mar = c(4.1, 4.1, 3.1, 1.1))
 for (j in wx){
-plot(icf_pca1$qs[[j]][,1], type = "b", main = xmain[j], xlab = "category", 
-     ylim = range(c(icf_pca1$qs[[j]][,1], icf_pca1$qs[[j]][,2], icf_pca1$qs[[j]][,3])),
-     ylab = "quantification", bty = "n", xaxt = "n", cex.main= 1)  
+plot(icf_pca1$qs[[j]][,3], type = "b", main = xmain[j], xlab = "category", bty = "n", 
+     ylim = range(icf_pca1$qs[[j]]), ylab = "quantification", xaxt = "n", cex.main= 1)  
 lines(icf_pca1$qs[[j]][,2], type = "b", col = 2, lty = 2, pch = 2, lwd=2)
-lines(icf_pca1$qs[[j]][,3], type = "b", col = 3, lty = 3, pch = 3, lwd=2)
+lines(icf_pca1$qs[[j]][,1], type = "b", col = 3, lty = 3, pch = 3, lwd=2)
 axis(1, at = 1:length(icf_pca1$qs[[j]][,1]), 
      labels = ((1:length(icf_pca1$qs[[j]][,1])) - c(rep(1,50), rep(5,16), 1)[j]))   
 }

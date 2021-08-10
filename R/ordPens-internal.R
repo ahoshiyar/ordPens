@@ -571,7 +571,7 @@ crO <- function(k, d=2){
 }
 
 
-penALS <- function(H, p, lambda, Qstart, crit, maxit, Ks, constr){
+penALS <- function(H, p, lambda, qstart, crit, maxit, Ks, constr){
   
   Q <- as.matrix(H) 
   n <- nrow(Q)     
@@ -582,6 +582,8 @@ penALS <- function(H, p, lambda, Qstart, crit, maxit, Ks, constr){
   ZZO <- list()
   iZZO <- list()
   
+  tracing <- c()
+  
   for (j in 1:m) 
   { 
     qj <- c(Q[,j],1:Ks[j])                          
@@ -590,6 +592,14 @@ penALS <- function(H, p, lambda, Qstart, crit, maxit, Ks, constr){
     ZZO[[j]] <- (t(Z[[j]])%*%Z[[j]] + lambda*Om)   
     iZZO[[j]] <- chol2inv(chol(ZZO[[j]]))          
     qs[[j]] <- ((1:Ks[j]) - mean(Q[,j]))/sd(Q[,j]) 
+  }
+  
+  if(length(qstart) > 0){
+    Qstart <- mapply("%*%", Z, qstart, SIMPLIFY = TRUE)
+    Q <- scale(Qstart)
+    qs <- qstart
+  }else{
+    Q <- scale(Q) 
   }
   
   iter <- 0
@@ -604,23 +614,31 @@ penALS <- function(H, p, lambda, Qstart, crit, maxit, Ks, constr){
     
     for (j in 1:m){
       
-      if (constr[j]){
-        
-        Amat <- cbind(0,diag(Ks[j]-1)) - cbind(diag(Ks[j]-1),0)
-        Amat <- t(Amat)
-        bvec <- numeric(Ks[j]-1)
-        dvec <- t(Z[[j]])%*%(X%*%A[j,])
-        qj <- solve.QP(Dmat=ZZO[[j]], dvec=dvec, Amat=Amat, bvec=bvec, meq=0)$solution
-        
+      if (constr[j]){ 
+        bvec <- c(n-1,numeric(Ks[j]-1)) 
+        dvec <- t(Z[[j]])%*%(X%*%A[j,]) 
+        Amat2 <- qs[[j]] %*% t(Z[[j]]) %*% Z[[j]]
+        Amat3 <- cbind(0,diag(Ks[j]-1)) - cbind(diag(Ks[j]-1),0)
+        Amat <- rbind( Amat2, Amat3)  
+        Amat <- t(Amat) 
       }else{
-        qj <- iZZO[[j]]%*%t(Z[[j]])%*%(X%*%A[j,])
+        bvec <- c(n-1)   
+        dvec <- t(Z[[j]])%*%(X%*%A[j,]) 
+        Amat2 <- qs[[j]] %*% t(Z[[j]]) %*% Z[[j]]
+        Amat <- rbind( Amat2)  
+        Amat <- t(Amat)
       }
+
+      qj <- solve.QP(Dmat=ZZO[[j]], dvec=dvec, Amat=Amat, bvec=bvec, meq=1)$solution
       
       qj <- as.numeric(qj)
       Zqj <- Z[[j]]%*%qj
       Q[,j] <- Zqj/sd(Zqj)
-      qs[[j]] <- qj/sd(Zqj)
+      qs[[j]] <- qj/sd(Zqj)   
+      
     }
+    
+    tracing <- c(tracing, sum(pca$sdev[1:p]^2) / sum(pca$sdev^2))
     
     # convergence?
     if (sum((QQ - Q)^2)/(n*m) < crit)
@@ -629,7 +647,15 @@ penALS <- function(H, p, lambda, Qstart, crit, maxit, Ks, constr){
     QQ <- Q
     iter <- iter + 1
   }
-  return(list("Q" = Q, "qs" = qs, "iter" = iter))
+  
+  # final pca
+  pca <- prcomp(Q, scale = FALSE)  
+  X <- pca$x[,1:p, drop = FALSE]  
+  A <- pca$rotation[,1:p, drop = FALSE]  
+  
+  tracing[length(tracing)] <- sum(pca$sdev[1:p]^2) / sum(pca$sdev^2)
+  
+  return(list("Q" = Q, "qs" = qs, "iter" = iter, "trace" = tracing))
 }
 
 

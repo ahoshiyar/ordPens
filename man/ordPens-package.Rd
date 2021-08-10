@@ -117,7 +117,7 @@ H <- ICFCoreSetCWP[, 1:67] + matrix(c(rep(1, 50), rep(5, 16), 1),
                                     byrow = TRUE)
 
 # nonlinear PCA
-ordPCA(H, p = 5, lambda = 10, maxit = 1000,
+ordPCA(H, p = 2, lambda = 0.5, maxit = 1000,
        Ks = c(rep(5, 50), rep(9, 16), 5), 
        constr = c(rep(TRUE, 50), rep(FALSE, 16), TRUE))
 
@@ -125,12 +125,12 @@ ordPCA(H, p = 5, lambda = 10, maxit = 1000,
 # k-fold cross-validation
 set.seed(1234)
 lambda <- 10^seq(4,-4, by = -0.1) 
-cvResult1 <- ordPCA(H, p = 5, lambda = lambda, maxit = 100,
+cvResult1 <- ordPCA(H, p = 2, lambda = lambda, maxit = 100,
        Ks = c(rep(5, 50), rep(9, 16), 5), 
        constr = c(rep(TRUE, 50), rep(FALSE, 16), TRUE),
        CV = TRUE, k = 5)
             
 # optimal lambda                    
-lambda[which.max(cvResult1$VAFtest)]                      
+lambda[which.max(apply(cvResult1$VAFtest,2,mean))]                      
 
 }
