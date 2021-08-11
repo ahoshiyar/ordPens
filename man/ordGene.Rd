@@ -36,7 +36,7 @@ doses (such as 0, 0.5, 2.0, 5.0, ...), if given, but in the levels, i.e., 1, 2, 
 }
 
 \value{
-A matrix containig the raw p-values for each gene (rows) when using (R)LRT,
+A matrix containing the raw p-values for each gene (rows) when using (R)LRT,
 ANOVA or a t-test (columns).
 }
 

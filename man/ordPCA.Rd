@@ -38,18 +38,18 @@ ordPCA(H, p, lambda = c(1), maxit = 100, crit = 1e-7, qstart = NULL,
 In order to respect the ordinal scale of the data, principal components analysis is not applied to data matrix \code{H} itself, but to newly constructed variables by assigning numerical values -- the quantifications -- to the categories via penalized, optimal scaling/scoring. 
 The calculation is done by alternately cycling through data scoring and PCA until convergence. 
 
-The penalty parameter controls the amount of shrinkage: For \code{lambda = 0}, purly nonlinear PCA via standard, optimal scaling is obtained. As \code{lambda} becomes very large, the quantifications are shrunken towars linearity, i.e., usual PCA is applied to levels 1,2,... ignoring the ordinal scale level of the variables. 
+The penalty parameter controls the amount of shrinkage: For \code{lambda = 0}, purely nonlinear PCA via standard, optimal scaling is obtained. As \code{lambda} becomes very large, the quantifications are shrunken towars linearity, i.e., usual PCA is applied to levels 1,2,... ignoring the ordinal scale level of the variables. 
 
 Note that optimization starts with the first component of \code{lambda}. Thus, if \code{lambda} is not in decreasing order, the vector will be sorted internally and so will be corresponding results.
 
-In case of cross-validation, for each \code{lambda} the proprtion of variance accounted for (VAF) is given for both the training and test data (see below).
+In case of cross-validation, for each \code{lambda} the proportion of variance accounted for (VAF) is given for both the training and test data (see below).
 }
 
 \value{
 A List with components:
   \item{qs}{a list of quantifications, if \code{lambda} is specified as a single value. Otherwise, a list of matrices,
   each column corresponding to a certain \code{lambda} value.}
-  \item{Q}{data matrix after scaling, if \code{lambda} is scalar. Otherwise, a list of matrices with each list entry corresponding to a certrain \code{lambda} value.}
+  \item{Q}{data matrix after scaling, if \code{lambda} is scalar. Otherwise, a list of matrices with each list entry corresponding to a certain \code{lambda} value.}
   \item{X}{matrix of factor values resulting from \code{\link{prcomp}}, if \code{lambda} is scalar. Otherwise, list of matrices.}
   \item{A}{loadings matrix as a result from \code{\link{prcomp}}, if \code{lambda} is scalar. 
   Otherwise, list of matrices.}

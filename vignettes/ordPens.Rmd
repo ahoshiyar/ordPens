@@ -158,7 +158,7 @@ Each curve corresponds to a dummy coefficient and each color corresponds to a va
 
 As mentioned before, the package also builds a bridge to `mgcv::gam()` by providing 
 a new type of spline basis for ordered factors `s(..., bs = "ordinal")`,
-such that smooth terms in the GAM formula can be used. In addition, generic functions for prediction and plotting are provided; and existings `mgcv` tools for further statistical inference can be used this way, which enables a very flexible analysis.
+such that smooth terms in the GAM formula can be used. In addition, generic functions for prediction and plotting are provided; and existing `mgcv` tools for further statistical inference can be used this way, which enables a very flexible analysis.
 
 Before estimation, we need to modify the ordinal predictors to the class of ordered factors. We also add a nominal covariate to control for. 
 ```{r}
@@ -219,7 +219,7 @@ round(predict(osl, newx), digits = 3)
 round(predict(ofu, newx), digits = 3)
 ```
 
-#### ICF core set for chronic widepsread Pain  
+#### ICF core set for chronic widespread Pain  
 
 Lastly, we demonstrate the three methods on a publicly available dataset suiting the high-dimensional setting they're designed for.
 The ICF core set for chronic widespread pain (CWP) consists of 67 rating scales - called ICF categories - and a physical health component summary measure (`phcs`).
