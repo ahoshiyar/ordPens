@@ -370,53 +370,48 @@ A situation similar to those of the ICF above is found with microarrays of gene 
 For each gene in the dataset, (R)LRT is applied separately using the `ordAOV()` function to test for differences between levels given in `lvs` and p-values are stored.  
 The null distribution of RLRT is obtained by simulation (one million values by default).
 
-As an illustrative example let's consider the `dopamine` dataset from package `IsoGene` (Lin et al. 2014). 
-
-As there are dependencies between `IsoGene` and the Bioconductor package `Biobase`, we firstly need to follow the instructions from http://bioconductor.org for installation:  
-```{r,warning = FALSE, message = FALSE} 
-if (!requireNamespace("BiocManager", quietly = TRUE)) 
-  install.packages("BiocManager") 
-BiocManager::install(c("Biobase","IsoGene")) 
-require(IsoGene)
-require(Biobase)  
-```
-
-The dataset contains 26 samples of dose-response microarray data of 1000 genes at six doses.
-
-Let's assume that `xpr` contains the gene expression data with genes in the rows and samples in the columns:
+Let's simulate some gene expression data...
+We assume that `xpr` contains the gene expression data with genes in the rows and samples in the columns:
 ```{r}
-data(dopamine)
-xpr <- data.frame(exprs(dopamine))
-head(xpr)
+set.seed(321) 
+ni <- 5
+n <- sum(rep(ni, 5))
+xpr <- matrix(NA, ncol = n, nrow = 100)
+inx <- sample(100,100) 
+mu_lin <- 3:7  
+mu_sq2 <- (-2:2)^2 * 0.5 + 3   
+a <- seq(0.75, 1.25, length.out = 10)
+
+for(i in 1:10){ 
+  xpr[inx[i],] <- a[i] * rep(mu_lin, each = ni) + rnorm(n)
+  xpr[inx[i+10],] <- a[i] * rep(mu_sq2, each = ni) + rnorm(n) 
+} 
+for(i in 21:100) xpr[inx[i],] <- 3 + rnorm(n)
 ```
 
-After some small modification, `dose` contains the corresponding doses being as follows: 
+The generated dataset contains 25 samples of (fictive) dose-response microarray data of 100 genes at five doses.
+
+`dose` contains the corresponding (fictive) doses being as follows: 
 ```{r}
-dose <- unlist(pData(dopamine))
-table(dose)
+dose <- rep(c(0, 0.01, 0.05, 0.2, 1.5), each = ni)
 ```
 
-Now we can plot the data for an exemplary gene and add the mean gene expression values (black line): 
+Now we can plot the data for an exemplary gene and add the true mean gene expression values (black line): 
 ```{r, fig.align="center"}
-plot(dose, xpr[83,], col = as.factor(dose), lwd = 2, ylab = "expression") 
-
-xpr.m <- tapply(as.numeric(xpr[83,])[order(dose)], as.factor(dose[order(dose)]), mean)
-lines(sort(unique(dose)), xpr.m, lty = 1, col = 1)
+plot(dose, xpr[54,], col = as.factor(dose), lwd = 2, ylab = "expression") 
+lines(sort(unique(dose)), mu_lin * a[which(inx == 54)], lty = 1, col = 1) 
 ```
  
 Alternatively, we can plot dose levels (on ordinal scale) against expression values: 
 ```{r, fig.align="center"}
-plot(1:length(sort(unique(dose))),ylim = range(xpr[83,]), pch = "", ylab = "expression", 
+plot(1:length(sort(unique(dose))), ylim = range(xpr[54,]), pch = "", ylab = "expression", 
      xlab = "levels", xaxt="n")
-axis(1, at = 1:length(sort(unique(dose))) )
-
-points(as.factor(dose), xpr[83,], col=as.factor(dose), lwd = 2)
-lines(1:length(sort(unique(dose))), xpr.m, lty = 1, col = 1)
+axis(1, at = 1:length(sort(unique(dose))) ) 
+points(as.factor(dose), xpr[54,], col=as.factor(dose), lwd = 2) 
+lines(1:length(sort(unique(dose))), mu_lin * a[which(inx == 54)], lty = 1)
 ``` 
 
- 
 `ordGene()` takes the expression data, being a matrix or data frame, and the vector of doses and stores p-values according to the (R)LRT test statistic.
- 
 ```{r }
 pvals <- ordGene(xpr = xpr, lvs = dose, nsim = 1e6)
 ```
@@ -425,8 +420,8 @@ In addition to (R)LRT, results of usual one-way ANOVA (not taking the factor's o
 
 Finally, we can compare the empirical cumulative distribution of the smallest p-values ($\leq 0.05$) produced from each of the tests (ANOVA, RLRT, t-test):
 ```{r, fig.align="center" } 
-plot(ecdf(pvals[,1]), xlim = c(0,0.05), ylim = c(0, 0.12),
-     main = "dopamine", xlab = "p-value", ylab = "F(p-value)")
+plot(ecdf(pvals[,1]), xlim = c(0,0.05), ylim = c(0, 0.25),
+     main = "", xlab = "p-value", ylab = "F(p-value)")
 plot(ecdf(pvals[,2]), xlim = c(0, 0.05), add = TRUE, col = 2)
 plot(ecdf(pvals[,3]), xlim = c(0, 0.05), add = TRUE, col = 3)
 legend('topleft', colnames(pvals), col = 1:3, lwd = 2, lty = 1) 
@@ -445,8 +440,6 @@ See also Sweeney et al. (2015) for a more detailed analysis on several publicly 
 * Gertheiss, J., F. Scheipl, T. Lauer, and H. Ehrhardt (2021). Statistical inference for ordinal predictors in generalized linear and additive models with application to bronchopulmonary dysplasia. Preprint, available from https://arxiv.org/abs/2102.01946.
 
 * Greven, S., C. Crainiceanu, H. Kuechenhoff, and A. Peters (2008). Restricted likelihood ratio testing for zero variance components in linear mixed models. *Journal of Computational and Graphical Statistics 17*, 870-891.
-
-* Lin, D., S. Pramana, T. Verbeke and Z. Shkedy (2014). IsoGene: order-restricted inference for microarray experiments, R package version 1.0-23.
 
 * Meier, L., S. van de Geer and P. Buehlmann (2008). The group lasso for logistic regression. *Journal of the Royal Statistical Society B 70*, 53-71.
 

@@ -63,28 +63,34 @@ phenotypes}, Statistical Applications in Genetics and Molecular Biology, 15, 213
 
 \examples{
 \dontrun{
-# use dopamine data from package IsoGene
- 
-if (!requireNamespace("BiocManager", quietly = TRUE)) 
-  install.packages("BiocManager")
-BiocManager::install(c("Biobase","IsoGene")) 
+# generate gene expression data
+set.seed(321) 
+ni <- 5
+n <- sum(rep(ni, 5))
+xpr <- matrix(NA, ncol = n, nrow = 100)
+inx <- sample(100,100) 
+mu_lin <- 3:7  
+mu_sq2 <- (-2:2)^2 * 0.5 + 3   
+a <- seq(0.75, 1.25, length.out = 10)
 
-require(IsoGene)
-require(Biobase)  
-data(dopamine)
-xpr <- data.frame(exprs(dopamine))
-dose <- unlist(pData(dopamine))
-plot(dose,xpr[83,], col=as.factor(dose), lwd=2, ylab="expression") 
+for(i in 1:10){ 
+  xpr[inx[i],] <- a[i] * rep(mu_lin, each = ni) + rnorm(n)
+  xpr[inx[i+10],] <- a[i] * rep(mu_sq2, each = ni) + rnorm(n) 
+} 
+for(i in 21:100) xpr[inx[i],] <- 3 + rnorm(n)
+
+dose <- rep(c(0,0.01,0.05,0.2,1.5), each = ni) 
+plot(dose, xpr[54,], col = as.factor(dose), lwd = 2, ylab = "expression") 
 
 # calculate p-values
-pvals <- ordGene(xpr = xpr, lvs = dose, nsim=1e6)
+pvals <- ordGene(xpr = xpr, lvs = dose, nsim = 1e6)
+
 # compare distribution of (small) p-values
-plot(ecdf(pvals[,1]), xlim=c(0,0.05), ylim=c(0,0.12),
-main="dopamine", xlab="p-value", ylab="F(p-value)")
-plot(ecdf(pvals[,2]), xlim=c(0,0.05), add=TRUE, col=2)
-plot(ecdf(pvals[,3]), xlim=c(0,0.05), add=TRUE, col=3)
-legend('topleft', colnames(pvals), col=1:3, lwd=2, lty=1) 
- 
+plot(ecdf(pvals[,1]), xlim = c(0,0.05), ylim = c(0, 0.25),
+     main = "", xlab = "p-value", ylab = "F(p-value)")
+plot(ecdf(pvals[,2]), xlim = c(0, 0.05), add = TRUE, col = 2)
+plot(ecdf(pvals[,3]), xlim = c(0, 0.05), add = TRUE, col = 3)
+legend('topleft', colnames(pvals), col = 1:3, lwd = 2, lty = 1) 
 }
 }
 
