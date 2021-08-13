@@ -7,7 +7,7 @@
 
 There were no ERRORs or WARNINGs.
 
-There were 2 NOTEs:
+There were 2 NOTEs via win-builder:
 
 * checking CRAN incoming feasibility ... NOTE
   Maintainer: 'Aisouda Hoshiyar <aisouda.hoshiyar@hsu-hh.de>'
