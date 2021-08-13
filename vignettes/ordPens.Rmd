@@ -370,23 +370,22 @@ A situation similar to those of the ICF above is found with microarrays of gene 
 For each gene in the dataset, (R)LRT is applied separately using the `ordAOV()` function to test for differences between levels given in `lvs` and p-values are stored.  
 The null distribution of RLRT is obtained by simulation (one million values by default).
 
-Let's simulate some gene expression data...
+Let's simulate some (toy) gene expression data...
 We assume that `xpr` contains the gene expression data with genes in the rows and samples in the columns:
 ```{r}
 set.seed(321) 
 ni <- 5
 n <- sum(rep(ni, 5))
 xpr <- matrix(NA, ncol = n, nrow = 100)
-inx <- sample(100,100) 
 mu_lin <- 3:7  
 mu_sq2 <- (-2:2)^2 * 0.5 + 3   
 a <- seq(0.75, 1.25, length.out = 10)
 
 for(i in 1:10){ 
-  xpr[inx[i],] <- a[i] * rep(mu_lin, each = ni) + rnorm(n)
-  xpr[inx[i+10],] <- a[i] * rep(mu_sq2, each = ni) + rnorm(n) 
+  xpr[i,] <- a[i] * rep(mu_lin, each = ni) + rnorm(n)
+  xpr[i+10,] <- a[i] * rep(mu_sq2, each = ni) + rnorm(n) 
 } 
-for(i in 21:100) xpr[inx[i],] <- 3 + rnorm(n)
+for(i in 21:100) xpr[i,] <- 3 + rnorm(n)
 ```
 
 The generated dataset contains 25 samples of (fictive) dose-response microarray data of 100 genes at five doses.
@@ -396,19 +395,28 @@ The generated dataset contains 25 samples of (fictive) dose-response microarray 
 dose <- rep(c(0, 0.01, 0.05, 0.2, 1.5), each = ni)
 ```
 
-Now we can plot the data for an exemplary gene and add the true mean gene expression values (black line): 
-```{r, fig.align="center"}
-plot(dose, xpr[54,], col = as.factor(dose), lwd = 2, ylab = "expression") 
-lines(sort(unique(dose)), mu_lin * a[which(inx == 54)], lty = 1, col = 1) 
+Now we can plot the data for some exemplary genes and add the true mean gene expression values (black lines): 
+```{r genes, figures-side, fig.show="hold", fig.width = 5, fig.height = 5, out.width="45%",out.height="50%"}
+plot(dose, xpr[4,], col = as.factor(dose), lwd = 2, ylab = "expression", main = "gene 4") 
+lines(sort(unique(dose)), mu_lin * a[4], lty = 1, col = 1) 
+
+plot(dose, xpr[14,], col = as.factor(dose), lwd = 2, ylab = "expression", main = "gene 14") 
+lines(sort(unique(dose)), mu_sq2 * a[4], lty = 1, col = 1) 
 ```
  
 Alternatively, we can plot dose levels (on ordinal scale) against expression values: 
-```{r, fig.align="center"}
-plot(1:length(sort(unique(dose))), ylim = range(xpr[54,]), pch = "", ylab = "expression", 
-     xlab = "levels", xaxt="n")
+```{r genes2, figures-side, fig.show="hold", fig.width = 5, fig.height = 5, out.width="45%",out.height="50%"}
+plot(1:length(sort(unique(dose))), ylim = range(xpr[4,]), pch = "", ylab = "expression", 
+     xlab = "levels", xaxt = "n")
 axis(1, at = 1:length(sort(unique(dose))) ) 
-points(as.factor(dose), xpr[54,], col=as.factor(dose), lwd = 2) 
-lines(1:length(sort(unique(dose))), mu_lin * a[which(inx == 54)], lty = 1)
+points(as.factor(dose), xpr[4,], col = as.factor(dose), lwd = 2) 
+lines(1:length(sort(unique(dose))), mu_lin * a[4], lty = 1)
+
+plot(1:length(sort(unique(dose))), ylim = range(xpr[14,]), pch = "", ylab = "expression", 
+     xlab = "levels", xaxt = "n")
+axis(1, at = 1:length(sort(unique(dose))) ) 
+points(as.factor(dose), xpr[14,], col = as.factor(dose), lwd = 2) 
+lines(1:length(sort(unique(dose))), mu_sq2 * a[4], lty = 1)
 ``` 
 
 `ordGene()` takes the expression data, being a matrix or data frame, and the vector of doses and stores p-values according to the (R)LRT test statistic.

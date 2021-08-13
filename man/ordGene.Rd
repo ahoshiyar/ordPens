@@ -63,26 +63,45 @@ phenotypes}, Statistical Applications in Genetics and Molecular Biology, 15, 213
 
 \examples{
 \dontrun{
-# generate gene expression data
+# generate toy gene expression data
 set.seed(321) 
 ni <- 5
 n <- sum(rep(ni, 5))
 xpr <- matrix(NA, ncol = n, nrow = 100)
-inx <- sample(100,100) 
 mu_lin <- 3:7  
 mu_sq2 <- (-2:2)^2 * 0.5 + 3   
 a <- seq(0.75, 1.25, length.out = 10)
 
 for(i in 1:10){ 
-  xpr[inx[i],] <- a[i] * rep(mu_lin, each = ni) + rnorm(n)
-  xpr[inx[i+10],] <- a[i] * rep(mu_sq2, each = ni) + rnorm(n) 
+  xpr[i,] <- a[i] * rep(mu_lin, each = ni) + rnorm(n)
+  xpr[i+10,] <- a[i] * rep(mu_sq2, each = ni) + rnorm(n) 
 } 
-for(i in 21:100) xpr[inx[i],] <- 3 + rnorm(n)
+for(i in 21:100) xpr[i,] <- 3 + rnorm(n)
 
-dose <- rep(c(0,0.01,0.05,0.2,1.5), each = ni) 
-plot(dose, xpr[54,], col = as.factor(dose), lwd = 2, ylab = "expression") 
+dose <- rep(c(0,0.01,0.05,0.2,1.5), each = ni)
+
+# continuous representation
+oldpar <- par(mfrow = c(2,2))
+plot(dose, xpr[4,], col = as.factor(dose), lwd = 2, ylab = "expression", main = "gene 4") 
+lines(sort(unique(dose)), mu_lin * a[4], lty = 1, col = 1) 
+plot(dose, xpr[14,], col = as.factor(dose), lwd = 2, ylab = "expression", main = "gene 14") 
+lines(sort(unique(dose)), mu_sq2 * a[4], lty = 1, col = 1) 
+
+# dose on ordinal scale
+plot(1:length(sort(unique(dose))), ylim = range(xpr[4,]), pch = "", ylab = "expression", 
+     xlab = "levels", xaxt="n")
+axis(1, at = 1:length(sort(unique(dose))) ) 
+points(as.factor(dose), xpr[4,], col=as.factor(dose), lwd = 2) 
+lines(1:length(sort(unique(dose))), mu_lin * a[4], lty = 1)
+plot(1:length(sort(unique(dose))), ylim = range(xpr[14,]), pch = "", ylab = "expression", 
+     xlab = "levels", xaxt="n")
+axis(1, at = 1:length(sort(unique(dose))) ) 
+points(as.factor(dose), xpr[14,], col=as.factor(dose), lwd = 2) 
+lines(1:length(sort(unique(dose))), mu_sq2 * a[4], lty = 1)
+par(oldpar)
 
 # calculate p-values
+library(ordPens)
 pvals <- ordGene(xpr = xpr, lvs = dose, nsim = 1e6)
 
 # compare distribution of (small) p-values
