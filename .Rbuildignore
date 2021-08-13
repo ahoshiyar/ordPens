@@ -2,3 +2,4 @@
 ^\.Rproj\.user$
 ^README\.Rmd$
 ^NEWS\.Rmd$
+^cran-comments\.md$
