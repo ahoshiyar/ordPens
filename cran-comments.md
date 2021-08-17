@@ -1,13 +1,13 @@
 ## Test environments
-* local R installation, R 4.1.0
-* ubuntu 16.04 (on travis-ci), R 4.1.0
-* win-builder (devel)
+* local macOS installation, R 4.1.0  
+* Fedora Linux, devel
+* win-builder, release and devel
 
 ## R CMD check results
 
-There were no ERRORs or WARNINGs.
+There were no ERRORs or WARNINGs. 
 
-There were 2 NOTEs via win-builder:
+There were 2 NOTEs:
 
 * checking CRAN incoming feasibility ... NOTE
   Maintainer: 'Aisouda Hoshiyar <aisouda.hoshiyar@hsu-hh.de>'
