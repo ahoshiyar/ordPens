@@ -14,8 +14,8 @@ a group lasso or generalized ridge penalty. Nonlinear principal components analy
 \tabular{ll}{
 Package: \tab ordPens\cr
 Type: \tab Package\cr
-Version: \tab 0.4.0\cr
-Date: \tab 2021-06-11\cr
+Version: \tab 1.0.0\cr
+Date: \tab 2021-08-17\cr
 Depends: \tab grplasso, mgcv, RLRsim, quadprog, glmpath\cr
 Suggests: \tab psy\cr
 License: \tab GPL-2\cr

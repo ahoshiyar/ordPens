@@ -12,10 +12,10 @@ There was 1 NOTE:
 * checking CRAN incoming feasibility ... NOTE
   Maintainer: 'Aisouda Hoshiyar <aisouda.hoshiyar@hsu-hh.de>'
   
-New maintainer: Aisouda Hoshiyar <aisouda.hoshiyar@hsu-hh.de>
-  
+New maintainer: Aisouda Hoshiyar <aisouda.hoshiyar@hsu-hh.de> ;
 Old maintainer: Jan Gertheiss <jgerthe@uni-goettingen.de>
- 
+
+I state that I have the permission from Jan Gertheiss to update the package.  
   
 ## Downstream dependencies
 
@@ -25,4 +25,4 @@ There are currently no downstream dependencies for this package.
 ## Resubmission
 This is a resubmission. In this version I have:
 
-* Converted the time consuming examples to \dontrun{}.
+* Converted the time consuming examples to dontrun{}.
