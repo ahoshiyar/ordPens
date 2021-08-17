@@ -77,6 +77,7 @@ data}. Statistical Modelling, 16, 161-200.
 
 
 \examples{
+\dontrun{
 ### smooth modeling of a simulated dataset
 set.seed(123)
 
@@ -132,5 +133,5 @@ cvResult1 <- ordPCA(H, p = 2, lambda = lambda, maxit = 100,
             
 # optimal lambda                    
 lambda[which.max(apply(cvResult1$VAFtest,2,mean))]                      
-
+}
 }

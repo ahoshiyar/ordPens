@@ -82,6 +82,7 @@ Psychological Methods, 12, 336-358.
 }
 
 \examples{
+\dontrun{
 ## load ICF data 
 data(ICFCoreSetCWP)
 
@@ -142,5 +143,6 @@ cvResult <- ordPCA(H, p = 5, lambda = lambda, maxit = 100,
                     CV = TRUE, k = 5, CVfit = FALSE)
 # optimal lambda                    
 lambda[which.max(apply(cvResult$VAFtest,2,mean))]
+}
 }
  
