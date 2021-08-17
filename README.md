@@ -26,7 +26,7 @@ For the function implementing nonlinear principal components analysis,
 `ordPCA`, details can be found in Hoshiyar et al. (2021) and
 `vignette("ordPCA", package = "ordPens")`.
 
-Version 1.0 is a major release with new functions:
+Version 1.0.0 is a major release with new functions:
 
 -   `ordPCA` applies nonlinear principal components analysis for ordinal
     variables. Also, performance evaluation and selection of an optimal

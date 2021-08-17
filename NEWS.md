@@ -1,5 +1,5 @@
 
-# ordPens 1.0
+# ordPens 1.0.0
 
 Major revision with added functionality.
 
