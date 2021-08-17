@@ -368,14 +368,14 @@ A situation similar to those of the ICF above is found with microarrays of gene 
  
 `ordGene()` is a wrapper function and operates as follows:
 For each gene in the dataset, (R)LRT is applied separately using the `ordAOV()` function to test for differences between levels given in `lvs` and p-values are stored.  
-The null distribution of RLRT is obtained by simulation (one million values by default).
+The null distribution of (R)LRT is obtained by simulation (one million values by default).
 
 Let's simulate some (toy) gene expression data...
 We assume that `xpr` contains the gene expression data with genes in the rows and samples in the columns:
 ```{r}
 set.seed(321) 
 ni <- 5
-n <- sum(rep(ni, 5))
+n <- sum(5*ni)
 xpr <- matrix(NA, ncol = n, nrow = 100)
 mu_lin <- 3:7  
 mu_sq2 <- (-2:2)^2 * 0.5 + 3   
@@ -426,7 +426,7 @@ pvals <- ordGene(xpr = xpr, lvs = dose, nsim = 1e6)
 
 In addition to (R)LRT, results of usual one-way ANOVA (not taking the factor's ordinal scale level into account) and a t-test assuming a linearity across factor levels (not the doses such as 0, 0.01, ...) are reported. 
 
-Finally, we can compare the empirical cumulative distribution of the smallest p-values ($\leq 0.05$) produced from each of the tests (ANOVA, RLRT, t-test):
+For illustration, we can compare the empirical cumulative distribution of the smallest p-values ($\leq 0.05$) produced from each of the tests (ANOVA, RLRT, t-test):
 ```{r, fig.align="center" } 
 plot(ecdf(pvals[,1]), xlim = c(0,0.05), ylim = c(0, 0.25),
      main = "", xlab = "p-value", ylab = "F(p-value)")

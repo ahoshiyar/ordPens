@@ -66,7 +66,7 @@ phenotypes}, Statistical Applications in Genetics and Molecular Biology, 15, 213
 # generate toy gene expression data
 set.seed(321) 
 ni <- 5
-n <- sum(rep(ni, 5))
+n <- sum(5*ni)
 xpr <- matrix(NA, ncol = n, nrow = 100)
 mu_lin <- 3:7  
 mu_sq2 <- (-2:2)^2 * 0.5 + 3   
