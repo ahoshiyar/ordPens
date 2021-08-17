@@ -1,7 +1,7 @@
 Package: ordPens
 Type: Package
 Title: Selection, Fusion, Smoothing and Principal Components Analysis for Ordinal Variables 
-Version: 1.0
+Version: 1.0.0
 Authors@R: c(
     person("Jan", "Gertheiss", email = "jan.gertheiss@hsu-hh.de", role = "aut"),
     person("Aisouda", "Hoshiyar", email = "aisouda.hoshiyar@hsu-hh.de", role = c("aut","cre")),
