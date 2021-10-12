@@ -128,7 +128,7 @@ abline(v = log10(lambda)[which.max(apply(cvResult$VAFtest,2,mean))],
        lty=2)  
 ```
  
-![Category quantifications/scores for $\lambda \to 0$ (solid black), $\lambda = 0.5$ (dashed red), $\lambda = 5$ (dotted green) (a)–(d); VAF by the first 5 principal components: (e) training data, (f) validation data with optimal $\lambda$ (dashed line).](ordPens_pca.pdf){ width=95% }
+![Category quantifications/scores for $\lambda \to 0$ (solid black), $\lambda = 0.5$ (dashed red), $\lambda = 5$ (dotted green) (a)–(d); VAF by the first 5 principal components: (e) training data, (f) validation data with optimal $\lambda$ (dashed line).](ordPens_pca.pdf){ width=100% }
 
  
 
