@@ -84,16 +84,18 @@ H <- ICFCoreSetCWP[, 1:67] + matrix(c(rep(1,50), rep(5,16), 1),
                                     nrow(ICFCoreSetCWP), 67, byrow = TRUE)
 
 # select brief core set variables 
-brief <- c("b130","b134","b140","b147","b152","b1602","b280","b455","b730","b760",
-           "d175","d230","d240","d430","d450","d640","d760","d770","d850","d920",
-           "e1101","e310","e355","e410","e420","e570")
+brief <- c("b130","b134","b140","b147","b152","b1602","b280","b455","b730",
+           "b760","d175","d230","d240","d430","d450","d640","d760","d770",
+           "d850","d920","e1101","e310","e355","e410","e420","e570")
+           
 H <- H[, brief]
 xnames <- names(H)
 
 # ordinal penalized PCA 
 icf_pca1 <- ordPCA(H, p = 2, lambda = c(5, 0.5, 0.001), maxit = 100, 
                    crit = 1e-7, qstart = NULL, Ks = c(rep(5,20), rep(9,6)), 
-                   constr = c(rep(TRUE,20), rep(FALSE,6)), CV = FALSE, k = 5) 
+                   constr = c(rep(TRUE,20), rep(FALSE,6)), CV = FALSE, 
+                   k = 5) 
 
 # 5-fold cross-validation
 lambda <- 10^seq(4, -4, by = -0.1)
@@ -104,22 +106,24 @@ cvResult <- ordPCA(H, p = 2, lambda = lambda, Ks = c(rep(5,20), rep(9,6)),
 
 # plotting results for selected variables
 par(mfrow = c(2,3))
-for(i in which(xnames=="b280" | xnames=="d450" | xnames=="e1101" | xnames=="e410")){
-  plot(icf_pca1$qs[[i]][,3], type = "b", xlab = "category", ylab = "quantification", 
-       col = 1, ylim = range(icf_pca1$qs[[i]]), main = xnames[i], bty = "n", xaxt = "n") 
-  lines(icf_pca1$qs[[i]][,2], type = "b", col = 2, lty = 2, pch = 2, lwd = 2)
-  lines(icf_pca1$qs[[i]][,1], type = "b", col = 3, lty = 3, pch = 3, lwd = 2)
+for(i in which(xnames=="b280"|xnames=="d450"|xnames=="e1101"|xnames=="e410"))
+{
+  plot(icf_pca1$qs[[i]][,3], type = "b", xlab = "category", col = 1,
+       ylab = "quantification", main = xnames[i], bty = "n", xaxt = "n",
+       ylim = range(icf_pca1$qs[[i]])) 
+  lines(icf_pca1$qs[[i]][,2], type="b", col=2, lty=2, pch=2, lwd=2)
+  lines(icf_pca1$qs[[i]][,1], type="b", col=3, lty=3, pch=3, lwd=2)
   axis(1, at = 1:length(icf_pca1$qs[[i]][,1])) 
 }
   
 plot(log10(lambda), apply(cvResult$VAFtrain, 2, mean), type = "l",  
-     xlab = expression(log[10](lambda)), ylab = "VAF", main = "training data",
-     cex.axis = 1.2, cex.lab = 1.2) 
+     xlab = expression(log[10](lambda)), ylab = "VAF", cex.axis = 1.2,
+     main = "training data", cex.lab = 1.2) 
 
 plot(log10(lambda), apply(cvResult$VAFtest, 2, mean), type = "l",
-     xlab = expression(log[10](lambda)), ylab = "VAF", main = "validation data",
-     cex.axis = 1.2, cex.lab = 1.2)
-abline(v = log10(lambda)[which.max(apply(cvResult$VAFtest, 2, mean))], lty = 2)  
+     xlab = expression(log[10](lambda)), ylab = "VAF", cex.axis = 1.2,
+     main = "validation data", cex.lab = 1.2)
+abline(v = log10(lambda)[which.max(apply(cvResult$VAFtest,2,mean))], lty=2)  
 ```
  
 ![Category quantifications/scores for $\lambda \to 0$ (solid black), $\lambda = 0.5$ (dashed red), $\lambda = 5$ (dotted green) (a)–(d); VAF by the first 5 principal components: (e) training data, (f) validation data with optimal $\lambda$ (dashed line).](ordPens_pca.pdf){ width=95% }
