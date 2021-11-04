@@ -1,8 +1,4 @@
----
-output:
-  html_document: default
-  pdf_document: default
----
+ 
 # How to contribute to `ordPens`
 
 Thank you for taking the time to contribute to the development of `ordPens`!
