@@ -27,7 +27,7 @@ header-includes:
 # Summary
 
 
-Ordinal data are a common case in applied statistics. In order to incorporate the ordinal scale level, among other things, regularization techniques are often suggested in the literature. In particular, penalization approaches for smoothing and selection when dealing with Likert-type data -- which are by no means restricted to Likert scale -- are commonly proposed. 
+Ordinal data are a common case in applied statistics. In order to incorporate the ordinal scale level, among other things, regularization techniques are often suggested in the literature [@Tutz:2014; @Tutz:2016]. In particular, penalization approaches for smoothing and selection when dealing with Likert-type data -- which are by no means restricted to Likert scale -- are commonly proposed. 
 ``ordPens`` is a package in the R programming language [@R] and provides several penalty approaches for ordinal predictors in regression models and ordinal variables for principal component analysis (PCA).    
 The main idea behind smoothing in the regression context is to maximize the penalized log-likelihood by introducing a penalty term and a tuning parameter controlling the amount of penalty. Different types of penalization can be considered, depending on whether to achieve smoothing, selection or clustering of variables. Smoothing only can be done by penalizing the sum of squared differences of adjacent coefficients. A modified group lasso based on a difference penalty can be used for selection. Clustering/fusion of categories can be achieved by the fused lasso penalizing absolute differences by using the $L_1$-norm. 
 
