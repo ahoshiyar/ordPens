@@ -61,6 +61,7 @@ The wrapper function `ordPCA()` handles both matrices or data frames of integers
 In order to take into account the ordinal character of the data, penalized ALS is applied where the amount of penalty can be controlled by the smoothing parameter `lambda` $\in \mathbb{R}_0^{+}$ using a second-order difference penalty. 
 In addition, the function provides the option of both non-monotone effects and incorporating constraints enforcing monotonicity.     
 
+
 #### One dimensional estimation
 Let’s start with the most basic example with univariate penalty, i.e. `lambda` being a scalar. We extract 5 principal components, specified by the argument `p`.
 ```{r} 
@@ -162,6 +163,7 @@ plot(log10(lambda), apply(ehd_pca4$VAFtest,2,mean), type = "l",
 abline(v = log10(lambda)[which.max(apply(ehd_pca4$VAFtest,2,mean))])
 ```
 
+ 
  
 ### ICF data example
 #### Monotonicity assumptions
