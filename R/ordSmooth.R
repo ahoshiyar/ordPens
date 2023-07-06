@@ -1,9 +1,10 @@
 ordSmooth <- function(x, y, u = NULL, z = NULL, offset = rep(0,length(y)), 
-  lambda, model = c("linear", "logit", "poisson"), penscale = identity,  
+  lambda, model = c("linear", "logit", "poisson"), restriction = c("refcat", "effect"), penscale = identity,  
   scalex = TRUE, nonpenx = NULL, eps = 1e-3, delta = 1e-6, maxit = 25, ...)
   {
     model <- match.arg(model)
     model <- switch(model, linear="linear", logit="logit", poisson="poisson")
+    restriction <- match.arg(restriction) 
     
     ## Check the x matrix
     if(!(is.matrix(x) | is.numeric(x) | is.data.frame(x)))
@@ -53,6 +54,8 @@ ordSmooth <- function(x, y, u = NULL, z = NULL, offset = rep(0,length(y)),
     grp <- rep(1:px,kx-1)
     x <- coding(x, constant=TRUE)
     x <- x[!is.na(y),]
+    p0 <- ncol(x)-1
+    
         if (scalex)
           {
             stdx <- apply(cbind(x),2,sd)[-1]
@@ -202,6 +205,25 @@ ordSmooth <- function(x, y, u = NULL, z = NULL, offset = rep(0,length(y)),
         znames <- NULL
       }
 
+    
+    ## Effect coding / sum to zero restriction
+    if(restriction == "effect")
+    {
+      modelbjk <-  xc[1:p0, ,drop=F]  
+      transcoef <- matrix(NA, p0, ncol(xc)) 
+      transb1 <- matrix(NA, px, ncol(xc)) 
+      for(j in 1:px){
+        means <- drop(apply(modelbjk[grp==j,, drop=F], 2, function(x) mean(c(0,x))) )
+        for(i in 1:ncol(xc)){
+          transcoef[grp==j,i] <- beffcjk <- modelbjk[grp==j,i] - means[i]
+          transb1[j,i] <- - sum(beffcjk)
+        }   
+      }
+      xcoefs[sequence(kx)>1,] <- transcoef 
+      xcoefs[sequence(kx)==1,] <- transb1 
+    } 
+    
+    
     coefs <- rbind(constant,xcoefs,ucoefs,zcoefs)
     rownames(coefs) <- c("intercept",xnames,unames,znames)
     colnames(coefs) <- lmbd
@@ -213,6 +235,7 @@ ordSmooth <- function(x, y, u = NULL, z = NULL, offset = rep(0,length(y)),
     out <- list(fitted = fits,
                 coefficients = coefs,
                 model = model,
+                restriction = restriction, 
                 lambda = lmbd,
                 xlevels = kx,
                 ulevels = ku,

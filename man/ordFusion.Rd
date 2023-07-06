@@ -2,12 +2,13 @@
 \alias{ordFusion}
 \title{Fusion and selection of dummy coefficients of ordinal predictors}
 \description{Fits dummy coefficients of ordinally scaled independent variables
-with a fused lasso penalty on differences of adjacent dummy coefficients using the \code{glmpath} algorithm.}
+with a fused lasso penalty on differences of adjacent dummy coefficients. Using the \code{ordinalNet} algorithm if cumulative logit model is fitted, otherwise \code{glmpath} algorithm is used.}
 
 \usage{
 ordFusion(x, y, u = NULL, z = NULL, offset = rep(0,length(y)), lambda,  
-  model = c("linear", "logit", "poisson"), scalex = TRUE,
-  nonpenx = NULL, frac.arclength = NULL, ...)
+  model = c("linear", "logit", "poisson", "cumulative"), 
+  restriction = c("refcat", "effect"), scalex = TRUE, nonpenx = NULL, 
+  frac.arclength = NULL, ...)
 }
 \arguments{
   \item{x}{the matrix of ordinal predictors, with each column corresponding to
@@ -18,20 +19,21 @@ ordFusion(x, y, u = NULL, z = NULL, offset = rep(0,length(y)), lambda,
   \item{u}{a matrix (or \code{data.frame}) of additional categorical (nominal) 
     predictors, with each column corresponding to one (additional) predictor and
     containing numeric values from \{1,2,...\}; corresponding dummy coefficients
-    will not be penalized, and for each covariate category 1 is taken as reference category.}
+    will not be penalized, and for each covariate category 1 is taken as reference category. Curretnly not supported if \code{model == "cumulative"}.}
   \item{z}{a matrix (or \code{data.frame}) of additional metric predictors, with 
     each column corresponding to one (additional) predictor; corresponding
-    coefficients will not be penalized.}
+    coefficients will not be penalized. Curretnly not supported if \code{model == "cumulative"}.}
   \item{offset}{vector of offset values.}
   \item{lambda}{vector of penalty parameters, i.e., lambda values.}
   \item{model}{the model which is to be fitted. Possible choices are "linear"
-    (default), "logit" or "poisson". See details below.}
+    (default), "logit", "poisson" or "cumulative". See details below.}
+  \item{restriction}{identifiability restriction for dummy coding. "reference" takes category 1 is as reference category (default), while with "effect" dummy coefficients sum up to 0 (known as effect coding).}
   \item{scalex}{logical. Should (split-coded) design matrix corresponding to
     \code{x} be scaled to have unit variance over columns before fitting? See details below.}
   \item{nonpenx}{vectors of indices indicating columns of
-    \code{x} whose regression coefficients are not penalized.}
+    \code{x} whose regression coefficients are not penalized. Curretnly not supported if \code{model == "cumulative"}.}
   \item{frac.arclength}{just in case the corresponding \code{glmpath} argument is to be modified; default is \code{1} for \code{model == "linear"}, and \code{0.1} otherwise.}  
-  \item{...}{additional arguments to \code{glmpath}.}
+  \item{...}{additional arguments to \code{ordinalNet} (if \code{model == "cumulative"}) or \code{glmpath}.}
 }
 \details{
   The method assumes that categorical covariates (contained in \code{x} and 
@@ -45,11 +47,11 @@ ordFusion(x, y, u = NULL, z = NULL, offset = rep(0,length(y)), lambda,
   
   If a linear regression model is fitted, response vector \code{y} may contain 
   any numeric values; if a logit model is fitted, \code{y} has to be 0/1 coded;
-  if a poisson model is fitted, \code{y} has to contain count data. 
+  if a poisson model is fitted, \code{y} has to contain count data. If a cumulative   logit model is fitted, \code{y} takes values 1,2,...,max.
   
   
   If \code{scalex} is \code{TRUE}, (split-coded) design matrix constructed from \code{x} is scaled to have 
-  unit variance over columns (see \code{standardize} argument of \code{glmpath}).
+  unit variance over columns (see \code{standardize} argument of \code{glmpath} or/and \code{ordinalNet}).
 }
 
 \value{An \code{ordPen} object, which is a list containing:
@@ -59,7 +61,8 @@ ordFusion(x, y, u = NULL, z = NULL, offset = rep(0,length(y)), lambda,
     dummy-coded (ordinal or nominal) categorical input variables (including the 
     reference category) as well as metric predictors. Columns correspond to 
     different lambda values.}
-  \item{model}{the type of the fitted model: "linear", "logit", or "poisson".}
+  \item{model}{the type of the fitted model: "linear", "logit", "poisson", or "cumulative".}
+  \item{restriction}{the type of restriction used for identifiability.}
   \item{lambda}{the used lambda values.}
   \item{xlevels}{a vector giving the number of levels of the ordinal predictors.}
   \item{ulevels}{a vector giving the number of levels of the nominal predictors (if any).}
@@ -80,7 +83,7 @@ ordFusion(x, y, u = NULL, z = NULL, offset = rep(0,length(y)), lambda,
 
  }
 
-\author{Jan Gertheiss}
+\author{Jan Gertheiss, Aisouda Hoshiyar}
 
 \seealso{\code{\link{plot.ordPen}}, \code{\link{predict.ordPen}}, 
 \code{\link{ICFCoreSetCWP}}}
@@ -115,7 +118,7 @@ plot(ofu)
 # this can (for example) be done as follows:
 plot(ofu, whx = 1, xlim = c(0,9), xaxt = "n")
 axis(side = 1, at = c(1,8), labels = c("no agreement","total agreement"))
-}
-
+} 
+ 
 \keyword{models}
 \keyword{regression}

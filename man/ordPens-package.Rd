@@ -14,9 +14,10 @@ a group lasso or generalized ridge penalty. Nonlinear principal components analy
 \tabular{ll}{
 Package: \tab ordPens\cr
 Type: \tab Package\cr
-Version: \tab 1.0.0\cr
-Date: \tab 2021-08-17\cr
+Version: \tab 1.1.0\cr
+Date: \tab 2023-07-10\cr
 Depends: \tab grplasso, mgcv, RLRsim, quadprog, glmpath\cr
+Imports: \tab ordinalNet\cr
 Suggests: \tab psy\cr
 License: \tab GPL-2\cr
 LazyLoad: \tab yes\cr
@@ -61,7 +62,7 @@ variables}. The Annals of Applied Statistics, 4, 2150-2180.
 
 Hoshiyar, A. (2020). \emph{Analyzing Likert-type data using penalized non-linear principal components analysis}, in: Proceedings of the 35th International Workshop on Statistical Modelling, Vol. I, 337-340.
 
-Hoshiyar, A., H.A.L. Kiers, and J. Gertheiss (2021). \emph{Penalized non-linear principal components analysis for ordinal variables with an application to international classification of functioning core sets}, Preprint.
+Hoshiyar, A., H.A.L. Kiers, and J. Gertheiss (2021). \emph{Penalized non-linear principal components analysis for ordinal variables with an application to international classification of functioning core sets},  British Journal of Mathematical and Statistical Psychology, 76, 353-371.
 
 Tutz, G. and J. Gertheiss (2014). \emph{Rating scales as predictors -- the old
 question of scale level and some answers}. Psychometrica, 79, 357-376.

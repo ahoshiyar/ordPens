@@ -1,6 +1,17 @@
 
 # ordPens 1.0.0
 
+Minor revision with added functionality.
+
+-   Functions `ordSelect`, `ordFusion` updated/extended to cumulative
+    logit model models
+-   Function `CVcumu` added, provides cross-validation for penalized
+    cumulative logit models
+-   Function `StabilityCumu` added, provides stability selection for
+    penalized cumulative logit models
+
+# ordPens 1.0.0
+
 Major revision with added functionality.
 
 -   Function `ordPCA` added for nonlinear principal components analysis

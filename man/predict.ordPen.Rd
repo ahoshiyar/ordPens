@@ -8,7 +8,7 @@
 \usage{
 \method{predict}{ordPen}(object, newx, newu = NULL, newz = NULL,
   offset = rep(0,nrow(as.matrix(newx))), 
-  type = c("link", "response"), ...)
+  type = c("link", "response", "class"), ...)
 }
 
 \arguments{
@@ -26,7 +26,7 @@
   \item{type}{the type of prediction; \code{type = "link"} is on the
     scale of linear predictors, whereas \code{type = "response"} is on
     the scale of the response variable, i.e., \code{type = "response"}
-    applies the inverse link function to the linear predictors.}
+    applies the inverse link function to the linear predictors. \code{type = "class"} is only available for cumulative logit models and returns the class number with the highest fitted probability.}
   \item{...}{additional arguments (not supported at this time).}
 }
 \value{
@@ -34,7 +34,7 @@
   the penalty parameter \code{lambda} of the \code{ordPen} object.
 }
 
-\author{Jan Gertheiss}
+\author{Jan Gertheiss, Aisouda Hoshiyar}
 
 \seealso{\code{\link{ordSelect}}, \code{\link{ordSmooth}}, \code{\link{ordFusion}}}
 

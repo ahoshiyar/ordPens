@@ -7,6 +7,12 @@
 \alias{ordAOV2}
 \alias{crO}
 \alias{penALS}
+\alias{ord.glasso}
+\alias{ordglasso_control}
+\alias{invlink}
+\alias{nloglik}
+\alias{nscore}
+\alias{nhessian}
 \alias{smooth.construct.ordinal.smooth.spec}
 \alias{Predict.matrix.ordinal.smooth}
 \alias{plot.ordinal.smooth}
@@ -19,6 +25,11 @@ ordAOV1(x, y, type, nsim, null.sample, ...)
 ordAOV2(x, y, type, nsim, null.sample, ...)
 crO(k, d=2)
 penALS(H, p, lambda, qstart, crit, maxit, Ks, constr)
+ord.glasso(x, y, lambda, weights = rep(1, length(y)), penscale = sqrt, 
+              standardize = TRUE, restriction = c("refcat", "effect"), 
+              nonpenx = NULL, control=ordglasso_control())
+ordglasso_control(control = list())
+invlink(eta)
 
 \method{smooth.construct}{ordinal.smooth.spec}(object, data, knots)
 \method{Predict.matrix}{ordinal.smooth}(object, data)

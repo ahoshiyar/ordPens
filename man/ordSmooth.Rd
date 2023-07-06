@@ -6,8 +6,9 @@ with the sum of squared differences of adjacent dummy coefficients being penaliz
 
 \usage{
 ordSmooth(x, y, u = NULL, z = NULL, offset = rep(0,length(y)), lambda, 
-  model = c("linear", "logit", "poisson"), penscale = identity, scalex = TRUE, 
-  nonpenx = NULL, eps = 1e-3, delta = 1e-6, maxit = 25, ...)
+  model = c("linear", "logit", "poisson"), restriction = c("refcat", "effect"),
+  penscale = identity, scalex = TRUE, nonpenx = NULL, eps = 1e-3, delta = 1e-6, 
+  maxit = 25, ...)
 }
 \arguments{
   \item{x}{the matrix (or \code{data.frame}) of ordinal predictors, with each 
@@ -27,6 +28,7 @@ ordSmooth(x, y, u = NULL, z = NULL, offset = rep(0,length(y)), lambda,
     Optimization starts with the first component. See details below.}
   \item{model}{the model which is to be fitted. Possible choices are "linear"
     (default), "logit" or "poisson". See details below.}
+   \item{restriction}{identifiability restriction for dummy coding. "reference" takes category 1 is as reference category (default), while with "effect" dummy coefficients sum up to 0 (known as effect coding).}
   \item{penscale}{rescaling function to adjust the value of the penalty
     parameter to the degrees of freedom of the parameter group.}
   \item{scalex}{logical. Should (split-coded) design matrix corresponding to \code{x} be scaled to have unit variance over columns before fitting? See details below.}

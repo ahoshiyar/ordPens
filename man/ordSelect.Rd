@@ -6,8 +6,9 @@ with a group lasso penalty on differences of adjacent dummy coefficients.}
 
 \usage{
 ordSelect(x, y, u = NULL, z = NULL, offset = rep(0,length(y)), lambda,  
-  model = c("linear", "logit", "poisson"), penscale = sqrt, scalex = TRUE,
-  nonpenx = NULL, eps = 1e-3, ...)
+  model = c("linear", "logit", "poisson", "cumulative"), 
+  restriction = c("refcat", "effect"), penscale = sqrt, scalex = TRUE, 
+  nonpenx = NULL, control = NULL, eps = 1e-3, ...) 
 }
 \arguments{
   \item{x}{the matrix of ordinal predictors, with each column corresponding to
@@ -18,15 +19,16 @@ ordSelect(x, y, u = NULL, z = NULL, offset = rep(0,length(y)), lambda,
   \item{u}{a matrix (or \code{data.frame}) of additional categorical (nominal) 
     predictors, with each column corresponding to one (additional) predictor and
     containing numeric values from \{1,2,...\}; corresponding dummy coefficients
-    will not be penalized, and for each covariate category 1 is taken as reference category.}
+    will not be penalized, and for each covariate category 1 is taken as reference category. Currently not supported if \code{model="cumulative"}.}
   \item{z}{a matrix (or \code{data.frame}) of additional metric predictors, with 
     each column corresponding to one (additional) predictor; corresponding
-    coefficients will not be penalized.}
+    coefficients will not be penalized. Currently not supported if \code{model="cumulative"}.}
   \item{offset}{vector of offset values.}
   \item{lambda}{vector of penalty parameters (in decreasing order).
     Optimization starts with the first component. See details below.}
   \item{model}{the model which is to be fitted. Possible choices are "linear"
-    (default), "logit" or "poisson". See details below.}
+    (default), "logit", "poisson" or "cumulative". See details below.}
+  \item{restriction}{identifiability restriction for dummy coding. "reference" takes category 1 is as reference category (default), while with "effect" dummy coefficients sum up to 0 (known as effect coding).}
   \item{penscale}{rescaling function to adjust the value of the penalty
     parameter to the degrees of freedom of the parameter group. See the
     references below.}
@@ -34,6 +36,7 @@ ordSelect(x, y, u = NULL, z = NULL, offset = rep(0,length(y)), lambda,
     \code{x} be scaled to have unit variance over columns before fitting? See details below.}
   \item{nonpenx}{vectors of indices indicating columns of
     \code{x} whose regression coefficients are not penalized.}
+  \item{control}{a list of control parameters only if \code{model=="cumulative"}.}
   \item{eps}{a (small) constant to be added to the columnwise standard
     deviations when scaling the design matrix, to control the effect of very small
     stds. See details below.}
@@ -51,7 +54,7 @@ ordSelect(x, y, u = NULL, z = NULL, offset = rep(0,length(y)), lambda,
   
   If a linear regression model is fitted, response vector \code{y} may contain 
   any numeric values; if a logit model is fitted, \code{y} has to be 0/1 coded;
-  if a poisson model is fitted, \code{y} has to contain count data. 
+  if a poisson model is fitted, \code{y} has to contain count data. If a cumulative   logit model is fitted, \code{y} takes values 1,2,...,max. 
   
   
   If \code{scalex} is \code{TRUE}, (split-coded) design matrix constructed from \code{x} is scaled to have 
@@ -69,7 +72,8 @@ ordSelect(x, y, u = NULL, z = NULL, offset = rep(0,length(y)), lambda,
     dummy-coded (ordinal or nominal) categorical input variables (including the 
     reference category) as well as metric predictors. Columns correspond to 
     different lambda values.}
-  \item{model}{the type of the fitted model: "linear", "logit", or "poisson".}
+  \item{model}{the type of the fitted model: "linear", "logit", "poisson", or "cumulative".}
+  \item{restriction}{the type of restriction used for identifiability.}
   \item{lambda}{the used lambda values.}
   \item{fraction}{the used fraction values (\code{NULL} in case of \code{ordSelect}).}
   \item{xlevels}{a vector giving the number of levels of the ordinal predictors.}
@@ -96,7 +100,7 @@ ordSelect(x, y, u = NULL, z = NULL, offset = rep(0,length(y)), lambda,
   with grouped variables}. Journal of the Royal Statistical Society B, 68, 49-67.
  }
 
-\author{Jan Gertheiss}
+\author{Jan Gertheiss, Aisouda Hoshiyar}
 
 \seealso{\code{\link{plot.ordPen}}, \code{\link{predict.ordPen}}, 
 \code{\link{ICFCoreSetCWP}}}

@@ -61,10 +61,11 @@ The wrapper function `ordPCA()` handles both matrices or data frames of integers
 In order to take into account the ordinal character of the data, penalized ALS is applied where the amount of penalty can be controlled by the smoothing parameter `lambda` $\in \mathbb{R}_0^{+}$ using a second-order difference penalty. 
 In addition, the function provides the option of both non-monotone effects and incorporating constraints enforcing monotonicity.     
 
+
 #### One dimensional estimation
-Let’s start with the most basic example with univariate penalty, i.e. `lambda` being a scalar. We extract 5 principal components, specified by the argument `p`.
+Let’s start with the most basic example with univariate penalty, i.e. `lambda` being a scalar. We extract 2 principal components, specified by the argument `p`.
 ```{r} 
-ehd_pca1 <- ordPCA(H, p = 5, lambda = 0.5, maxit = 100, crit = 1e-7,
+ehd_pca1 <- ordPCA(H, p = 2, lambda = 0.5, maxit = 100, crit = 1e-7,
                    qstart = NULL, Ks = apply(H, 2, max), constr = rep(TRUE, ncol(H)),
                    CV = FALSE, k = 5, CVfit = FALSE)
 ```
@@ -79,10 +80,10 @@ Estimated quantifications:
 ehd_pca1$qs
 ```
 
-We can visualize the estimates, e.g., for Variable *e2*, by selecting the corresponding list entry:
+We can visualize the estimates, e.g., for Variable *e9*, by selecting the corresponding list entry:
 ```{r, fig.align="center"}
-plot(1:5, ehd_pca1$qs[[2]], type = "b", xlab = "category", ylab = "quantification", 
-     col = 2, main = colnames(H)[2], bty = "n")
+plot(1:5, ehd_pca1$qs[[9]], type = "b", xlab = "category", ylab = "quantification", 
+     col = 2, main = colnames(H)[9], bty = "n")
 ```
 
 
@@ -91,7 +92,7 @@ plot(1:5, ehd_pca1$qs[[2]], type = "b", xlab = "category", ylab = "quantificatio
 We can apply the function for different values of the penalty parameter. As we specify `lambda` as a (decreasing) vector, the output will result in a list of multivariate matrices. Note that optimization starts with the first component of lambda. Thus, if lambda is not in decreasing order, the vector will be sorted internally and so will be corresponding results.
 
 ```{r}
-ehd_pca2 <- ordPCA(H, p = 5, lambda = c(5, 0.5, 0), maxit = 100, crit = 1e-7,
+ehd_pca2 <- ordPCA(H, p = 2, lambda = c(5, 0.5, 0), maxit = 100, crit = 1e-7,
                    qstart = NULL, Ks = apply(H, 2, max), constr = rep(TRUE, ncol(H)),
                    CV = FALSE)
 ```
@@ -101,17 +102,17 @@ ehd_pca2 <- ordPCA(H, p = 5, lambda = c(5, 0.5, 0), maxit = 100, crit = 1e-7,
 summary(ehd_pca2$pca[[1]])
 ```
 
-`ehd_pca2$qs`: List of matrices (of dimension `Ks x length(lambda)`) with entries corresponding to the variables, e.g. for the second variable (*e2*):  
+`ehd_pca2$qs`: List of matrices (of dimension `Ks x length(lambda)`) with entries corresponding to the variables, e.g. for the second variable (*e9*):  
 ```{r}
-ehd_pca2$qs[[2]]
+ehd_pca2$qs[[9]]
 ```
 
 With an increasing penalty parameter, quantifications become increasingly linear:
 ```{r, fig.align="center"}
-plot(ehd_pca2$qs[[2]][,3], type = "b", xlab = "category", ylab = "quantification", col = 1, 
-     ylim = range(ehd_pca2$qs[[2]]), main = colnames(H)[2], bty = "n")
-lines(ehd_pca2$qs[[2]][,2], type = "b", col = 2, lty = 2, pch = 2, lwd=2)
-lines(ehd_pca2$qs[[2]][,1], type = "b", col = 3, lty = 3, pch = 3, lwd=2)
+plot(ehd_pca2$qs[[9]][,3], type = "b", xlab = "category", ylab = "quantification", col = 1, 
+     ylim = range(ehd_pca2$qs[[9]]), main = colnames(H)[9], bty = "n")
+lines(ehd_pca2$qs[[9]][,2], type = "b", col = 2, lty = 2, pch = 2, lwd=2)
+lines(ehd_pca2$qs[[9]][,1], type = "b", col = 3, lty = 3, pch = 3, lwd=2)
 ```
 
 Visualizing some variables:
@@ -131,7 +132,7 @@ for(j in c(1, 9, 12, 13, 15, 19)){
 #### Comparison of VAF for different penalties
 We can also compare different amounts of penalization by means of variance accounted for (VAF) for performance evaluation by setting `CV = TRUE` and specifying the number of folds `k`. The resulting output is a matrix with columns corresponding to `lambda` and rows corresponding to the folds `k`. Use `CVfit = TRUE` to perform both k-fold cross validation and estimation (which, however, can be time-consuming if lambda has many elements). 
 ```{r}
-ehd_pca3 <- ordPCA(H, p = 5, lambda = c(5, 0.5, 0.001), maxit = 100, crit = 1e-7,
+ehd_pca3 <- ordPCA(H, p = 2, lambda = c(5, 0.5, 0.001), maxit = 100, crit = 1e-7,
                    qstart = NULL, Ks = apply(H, 2, max), constr = rep(TRUE, ncol(H)),
                    CV = TRUE, k = 5)
 
@@ -144,25 +145,61 @@ In addiction, the function provides the option of both non-monotone effects and 
 ```{r}
 lambda <- 10^seq(4, -4, by = -0.1)
 set.seed(456)
-ehd_pca4 <- ordPCA(H, p = 5, lambda = lambda, maxit = 100, crit = 1e-7,
-                   qstart = NULL, Ks = apply(H, 2, max), constr = rep(TRUE, ncol(H)),
-                   CV = TRUE, k = 5, CVfit = FALSE)
+ehd_CV_p2 <- ordPCA(H, p = 2, lambda = lambda, maxit = 100, crit = 1e-7, Ks = apply(H, 2, max),
+                   qstart = NULL, constr = rep(TRUE, ncol(H)), CV = TRUE, k = 5, CVfit = FALSE)
 
-ehd_pca4$VAFtest
+lam_p2 <- (lambda)[which.max(apply(ehd_CV_p2$VAFtest,2,mean))]
+ehd_CV_p2$VAFtest
 ```
 
 The optimal $\lambda$ can then be determined by the value maximizing the cross-validated VAF on the validation set, averaged over folds:
 ```{r test, figures-side, fig.show="hold", fig.width = 5, fig.height = 5, out.width="45%",out.height="50%"}  
-plot(log10(lambda), apply(ehd_pca4$VAFtrain,2,mean), type = "l",
+plot(log10(lambda), apply(ehd_CV_p2$VAFtrain,2,mean), type = "l",
      xlab = expression(log[10](lambda)), ylab = "proportion of variance explained",
      main = "training data", cex.axis = 1.2, cex.lab = 1.2, cex.main = 1.4)
-plot(log10(lambda), apply(ehd_pca4$VAFtest,2,mean), type = "l",
+plot(log10(lambda), apply(ehd_CV_p2$VAFtest,2,mean), type = "l",
      xlab = expression(log[10](lambda)), ylab = "proportion of variance explained",
      main = "validation data", cex.axis = 1.2, cex.lab = 1.2, cex.main = 1.4)
-abline(v = log10(lambda)[which.max(apply(ehd_pca4$VAFtest,2,mean))])
+abline(v = log10(lambda)[which.max(apply(ehd_CV_p2$VAFtest,2,mean))])
 ```
 
+
+#### Selecting the number of components
+
+Note, that the choice of $\lambda$ relies on a fixed number of components `p`, which must be specified before $\lambda$ is selected. One strategy for selecting an appropriate number of components, is to use the elbow of the scree plot for standard linear PCA as an initial guess. 
+To make sure that the choice is valid, we could then look at different scree plots when extracting different `p`'s in that area (here: `p=1`, `p=2`, `p=3`, `p=4`) and inserting the respective optimal $\lambda$ value:
+
+```{r, fig.align="center"}
+# evaluate model with optimal lambda for p=2
+ehd_pca_p2 <- ordPCA(H, p=2, lambda = lam_p2, Ks=apply(H,2,max), constr=rep(TRUE,ncol(H)))
+
+# evaluate optimal lambda & model for p=1, p=3, p=4
+set.seed(456)
+ehd_CV_p1 <- ordPCA(H, p = 1, lambda=lambda, constr = rep(TRUE, ncol(H)), CV = TRUE, k = 5)
+ehd_CV_p3 <- ordPCA(H, p = 3, lambda=lambda, constr = rep(TRUE, ncol(H)), CV = TRUE, k = 5)
+ehd_CV_p4 <- ordPCA(H, p = 4, lambda=lambda, constr = rep(TRUE, ncol(H)), CV = TRUE, k = 5)
+
+lam_p1 <- (lambda)[which.max(apply(ehd_CV_p1$VAFtest,2,mean))]
+lam_p3 <- (lambda)[which.max(apply(ehd_CV_p3$VAFtest,2,mean))]
+lam_p4 <- (lambda)[which.max(apply(ehd_CV_p4$VAFtest,2,mean))]
+
+ehd_pca_p1 <- ordPCA(H, p=3, lambda=lam_p1, Ks=apply(H,2,max), constr=rep(TRUE,ncol(H)))
+ehd_pca_p3 <- ordPCA(H, p=3, lambda=lam_p1, Ks=apply(H,2,max), constr=rep(TRUE,ncol(H)))
+ehd_pca_p4 <- ordPCA(H, p=4, lambda=lam_p1, Ks=apply(H,2,max), constr=rep(TRUE,ncol(H)))
  
+plot(ehd_pca_p1$pca$sdev[1:10]^2, bty="n",  xaxt="n", type="o", main=NULL, xlab="", pch=19,
+     ylab="Variances", ylim=range(c(ehd_pca_p1$pca$sdev^2, prcomp(H, scale=T)$sdev^2)), col=6)
+lines(1:10, ehd_pca_p2$pca$sdev[1:10]^2, col = 2, type = "o", pch = 19)
+lines(1:10, ehd_pca_p3$pca$sdev[1:10]^2, col = 3, type = "o", pch = 19)
+lines(1:10, ehd_pca_p4$pca$sdev[1:10]^2, col = 4, type = "o", pch = 19)
+lines(1:10, prcomp(H, scale = T)$sdev[1:10]^2, col = 1, type = "o", pch = 19)
+legend(8, 5, legend=c("p=1","p=2","p=3","p=4","std"), col=c(6,2:4,1), lty=1, bty="n")
+axis(1, at = 1:10, labels = 1:10)  
+```
+
+As can be seen for different `p` values, for the `ehd` data, the first two components are by far the most relevant. This can also be confirmed when viewing the scree plot for standard linear PCA.  
+
+
 ### ICF data example
 #### Monotonicity assumptions
 The International Classification of Functioning, Disability and Health (ICF) core set data for chronic widespread pain (CWP) available in the `ordPens` package consists of 420 observations of 67 ordinally scaled variables, each one associated with one of the following four types: 'body functions', 'body structures', 'activities and participation', and 'environmental factors'. 
