@@ -62,6 +62,7 @@ In order to take into account the ordinal character of the data, penalized ALS i
 In addition, the function provides the option of both non-monotone effects and incorporating constraints enforcing monotonicity.     
 
 
+ 
 #### One dimensional estimation
 Let’s start with the most basic example with univariate penalty, i.e. `lambda` being a scalar. We extract 2 principal components, specified by the argument `p`.
 ```{r} 
@@ -161,6 +162,7 @@ plot(log10(lambda), apply(ehd_CV_p2$VAFtest,2,mean), type = "l",
      xlab = expression(log[10](lambda)), ylab = "proportion of variance explained",
      main = "validation data", cex.axis = 1.2, cex.lab = 1.2, cex.main = 1.4)
 abline(v = log10(lambda)[which.max(apply(ehd_CV_p2$VAFtest,2,mean))])
+
 ```
 
 
@@ -186,6 +188,47 @@ lam_p4 <- (lambda)[which.max(apply(ehd_CV_p4$VAFtest,2,mean))]
 ehd_pca_p1 <- ordPCA(H, p=3, lambda=lam_p1, Ks=apply(H,2,max), constr=rep(TRUE,ncol(H)))
 ehd_pca_p3 <- ordPCA(H, p=3, lambda=lam_p1, Ks=apply(H,2,max), constr=rep(TRUE,ncol(H)))
 ehd_pca_p4 <- ordPCA(H, p=4, lambda=lam_p1, Ks=apply(H,2,max), constr=rep(TRUE,ncol(H)))
+=======
+```
+
+
+#### Selecting the number of components
+
+Note, that the choice of $\lambda$ relies on a fixed number of components `p`, which must be specified before $\lambda$ is selected. One strategy for selecting an appropriate number of components, is to use the elbow of the scree plot for standard linear PCA as an initial guess. 
+To make sure that the choice is valid, we could then look at different scree plots when extracting different `p`'s in that area (here: `p=1`, `p=2`, `p=3`, `p=4`) and inserting the respective optimal $\lambda$ value:
+
+```{r, fig.align="center"}
+# evaluate model with optimal lambda for p=2
+ehd_pca_p2 <- ordPCA(H, p=2, lambda = lam_p2, Ks=apply(H,2,max), constr=rep(TRUE,ncol(H)))
+
+# evaluate optimal lambda & model for p=1, p=3, p=4
+set.seed(456)
+ehd_CV_p1 <- ordPCA(H, p = 1, lambda=lambda, constr = rep(TRUE, ncol(H)), CV = TRUE, k = 5)
+ehd_CV_p3 <- ordPCA(H, p = 3, lambda=lambda, constr = rep(TRUE, ncol(H)), CV = TRUE, k = 5)
+ehd_CV_p4 <- ordPCA(H, p = 4, lambda=lambda, constr = rep(TRUE, ncol(H)), CV = TRUE, k = 5)
+
+lam_p1 <- (lambda)[which.max(apply(ehd_CV_p1$VAFtest,2,mean))]
+lam_p3 <- (lambda)[which.max(apply(ehd_CV_p3$VAFtest,2,mean))]
+lam_p4 <- (lambda)[which.max(apply(ehd_CV_p4$VAFtest,2,mean))]
+
+ehd_pca_p1 <- ordPCA(H, p=3, lambda=lam_p1, Ks=apply(H,2,max), constr=rep(TRUE,ncol(H)))
+ehd_pca_p3 <- ordPCA(H, p=3, lambda=lam_p1, Ks=apply(H,2,max), constr=rep(TRUE,ncol(H)))
+ehd_pca_p4 <- ordPCA(H, p=4, lambda=lam_p1, Ks=apply(H,2,max), constr=rep(TRUE,ncol(H)))
+ 
+plot(ehd_pca_p1$pca$sdev[1:10]^2, bty="n",  xaxt="n", type="o", main=NULL, xlab="", pch=19,
+     ylab="Variances", ylim=range(c(ehd_pca_p1$pca$sdev^2, prcomp(H, scale=T)$sdev^2)), col=6)
+lines(1:10, ehd_pca_p2$pca$sdev[1:10]^2, col = 2, type = "o", pch = 19)
+lines(1:10, ehd_pca_p3$pca$sdev[1:10]^2, col = 3, type = "o", pch = 19)
+lines(1:10, ehd_pca_p4$pca$sdev[1:10]^2, col = 4, type = "o", pch = 19)
+lines(1:10, prcomp(H, scale = T)$sdev[1:10]^2, col = 1, type = "o", pch = 19)
+legend(8, 5, legend=c("p=1","p=2","p=3","p=4","std"), col=c(6,2:4,1), lty=1, bty="n")
+axis(1, at = 1:10, labels = 1:10)  
+```
+
+As can be seen for different `p` values, for the `ehd` data, the first two components are by far the most relevant. This can also be confirmed when viewing the scree plot for standard linear PCA.  
+
+ 
+>>>>>>> d4b1b5e8bdb2525c677c2bebababe2e56804a737
  
 plot(ehd_pca_p1$pca$sdev[1:10]^2, bty="n",  xaxt="n", type="o", main=NULL, xlab="", pch=19,
      ylab="Variances", ylim=range(c(ehd_pca_p1$pca$sdev^2, prcomp(H, scale=T)$sdev^2)), col=6)

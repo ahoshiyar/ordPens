@@ -47,6 +47,47 @@ Version 1.0.0 is a major release with new functions:
     `mgcv::gam()` formula can be used as an alternative and extension to
     `ordSmooth()`. Additionally, generic functions for prediction and
     plotting are provided.
+    
+## Installation & getting started
+
+For standard use, install `ordPens` from
+[CRAN](https://cran.r-project.org/package=ordPens):
+
+``` r
+install.packages("ordPens")
+```
+
+The development version of the package may be installed from GitHub:
+
+``` r
+devtools::install_git("https://github.com/ahoshiyar/ordPens", build_vignettes = TRUE)
+```
+
+For a detailed overview about the functionalities and given examples
+type:
+
+``` r
+library(ordPens)
+vignette("ordPens", package = "ordPens")
+vignette("ordPCA", package = "ordPens")
+```
+
+## Issues
+
+If you encounter any bugs or have any specific feature requests, please
+[file an issue](https://github.com/ahoshiyar/ordPens/issues).
+
+## Contributions & Code of conduct
+
+Contributions are very welcome. Interested contributors should consult
+the [contribution
+guidelines](https://github.com/ahoshiyar/ordPens/blob/master/Contributing.md)
+prior to submitting a pull request.
+
+Please note that the `ordPens` package is released with a [Contributor
+Code of
+Conduct](https://www.contributor-covenant.org/version/2/0/code_of_conduct/).
+By contributing to this project, you agree to abide by its terms.
 
 ## Installation & getting started
 

@@ -15,7 +15,7 @@ Suggests:
     psy,
     knitr,
     rmarkdown,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0) 
 VignetteBuilder: knitr
 License: GPL-2
 LazyLoad: yes
