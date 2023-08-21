@@ -293,3 +293,5 @@ ordFusion <- function(x, y, u = NULL, z = NULL, offset = rep(0,length(y)), lambd
               zcovars = length(znames))
   structure(out, class = "ordPen")
 }
+
+                          
