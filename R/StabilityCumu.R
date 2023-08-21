@@ -68,4 +68,3 @@ Stability.cumu <- function(x, y, lambda, n_iter=100, type=c("selection", "fusion
  return(list(Pi=Pi, msize=msize)) 
 }
 
-
