@@ -27,4 +27,5 @@ test_that("lambda in ordPCA gets sorted properly",
             rm(list=ls())
                       
 })
- 
+
+
