@@ -74,3 +74,4 @@ round(predict(o3, newx), digits=3)
 }
 
 \keyword{methods}
+
