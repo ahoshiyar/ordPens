@@ -136,3 +136,4 @@ cvResult1 <- ordPCA(H, p = 2, lambda = lambda, maxit = 100,
 lambda[which.max(apply(cvResult1$VAFtest,2,mean))]                      
 }
 }
+
