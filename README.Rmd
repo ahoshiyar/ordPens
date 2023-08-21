@@ -89,3 +89,4 @@ Please note that the `ordPens` package is released with a [Contributor Code of C
 * Tutz, G. and J. Gertheiss (2014). Rating scales as predictors – the old question of scale level and some answers. *Psychometrica 79*, 357-376.
 
 * Tutz, G. and J. Gertheiss (2016). Regularized regression for categorical data. *Statistical Modelling 16*, 161-200.
+
