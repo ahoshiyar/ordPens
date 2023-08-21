@@ -33,6 +33,7 @@ The stability path then shows the order of relevance of the predictors according
     \item{mSize}{matrix of size \code{n_iter} \eqn{\times} length(\code{lambda}) containing the corresponding model size.}
 }
 
+
 \references{
 
 Meinshausen, N. and Buehlmann, P. (2010). \emph{Stability selection}, Journal of the Royal Statis-
