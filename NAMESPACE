@@ -22,7 +22,8 @@ S3method(Predict.matrix, ordinal.smooth)
 S3method(plot, ordinal.smooth)
 
 
-  
+
+
    
   
   
