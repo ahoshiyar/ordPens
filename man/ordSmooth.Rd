@@ -172,3 +172,4 @@ plot(gom2)
 
 \keyword{models}
 \keyword{regression}
+
