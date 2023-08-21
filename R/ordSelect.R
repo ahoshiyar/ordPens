@@ -293,3 +293,5 @@ ordSelect <- function(x, y, u = NULL, z = NULL, offset = rep(0,length(y)),
               zcovars = length(znames))
   structure(out, class = "ordPen")
 }
+
+                            
