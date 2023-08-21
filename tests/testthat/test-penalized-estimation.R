@@ -337,8 +337,3 @@ test_that("ordSmooth, ordSelect, ordFusion work properly",
 
 
 
-
-
-
-
-
