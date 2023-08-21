@@ -49,7 +49,6 @@ ordCV(x, y, u = NULL, z = NULL, k=5, lambda, offset = rep(0,length(y)),
   
   
 
-
 \value{
 Returns a list containing the following components:
   \item{Train}{matrix of size (k x \code{length(lambda)}) containing brier/deviance scores on the training data. }
