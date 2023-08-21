@@ -58,3 +58,4 @@ ordCV <- function(x, y, u = NULL, z = NULL, k=5, lambda, offset = rep(0,length(y
                Test = Test)
   return(out)
 }
+
