@@ -184,4 +184,3 @@ predict.ordPen <- function(object, newx, newu = NULL, newz = NULL,
 
   return(fit)
 }
-
