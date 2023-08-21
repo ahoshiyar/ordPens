@@ -114,8 +114,3 @@ test_that("ord ANOVA and ordGene work properly",
             
 })
 
-
-
-
-
-
