@@ -1176,5 +1176,3 @@ nhessian <- function(beta, y, x, weights = rep(1, nrow(x))){
   return(-(H)) 
 }
 
-
-
