@@ -31,6 +31,7 @@ ord.glasso(x, y, lambda, weights = rep(1, length(y)), penscale = sqrt,
 ordglasso_control(control = list())
 invlink(eta)
 
+
 \method{smooth.construct}{ordinal.smooth.spec}(object, data, knots)
 \method{Predict.matrix}{ordinal.smooth}(object, data)
 \method{plot}{ordinal.smooth}(x, P=NULL, data=NULL, label="", se1.mult=1, se2.mult=2,
