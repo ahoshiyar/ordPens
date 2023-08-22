@@ -106,6 +106,10 @@ By contributing to this project, you agree to abide by its terms.
     sets. *British Journal of Mathematical and Statistical Psychology
     76*, 353-371.
 
+-   Hoshiyar, A., Gertheiss, L.H., Spiller, A. and Gertheiss, J. (2023). 
+    Regularization and Model Selection for Item-on-Items Regression with 
+    Applications to Food Products' Survey Data. *Preprint on Arxiv*.
+
 -   Sweeney, E., C. Crainiceanu, and J. Gertheiss (2015). Testing
     differentially expressed genes in dose-response studies and with
     ordinal phenotypes. *Statistical Applications in Genetics and
