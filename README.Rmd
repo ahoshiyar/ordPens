@@ -84,6 +84,8 @@ Please note that the `ordPens` package is released with a [Contributor Code of C
 
 * Hoshiyar, A., H.A.L. Kiers, and J. Gertheiss (2021). Penalized non-linear principal components analysis for ordinal variables with an application to international classification of functioning core sets. *British Journal of Mathematical and Statistical Psychology 76*, 353-371.
 
+* Hoshiyar, A., Gertheiss, L.H., Spiller, A. and Gertheiss, J. (2023). Regularization and Model Selection for Item-on-Items Regression with Applications to Food Products' Survey Data. *Preprint on Arxiv*.
+
 * Sweeney, E., C. Crainiceanu, and J. Gertheiss (2015). Testing differentially expressed genes in dose-response studies and with ordinal phenotypes. *Statistical Applications in Genetics and Molecular Biology 15*, 213-235.
 
 * Tutz, G. and J. Gertheiss (2014). Rating scales as predictors – the old question of scale level and some answers. *Psychometrica 79*, 357-376.
