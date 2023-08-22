@@ -29,11 +29,11 @@ For the function implementing nonlinear principal components analysis,
 Version 1.1.0 is a minor release with new functions:
 
 -   Functions `ordSelect`, `ordFusion` updated/extended to cumulative
-    logit model models
+    logit model models.
 -   Function `ordCV` added, provides cross-validation for penalized
-    regression models with ordinal predictors  
+    regression models with ordinal predictors.  
 -   Function `StabilityCumu` added, provides stability selection for
-    penalized cumulative logit models
+    penalized cumulative logit models.
 
 Version 1.0.0 is a major release with new functions:
 
