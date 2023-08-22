@@ -10,7 +10,3 @@ There were no ERRORs, no WARNINGs and no NOTEs.
 ## Downstream dependencies
 
 There are currently no downstream dependencies for this package.
-
-
-
- 
