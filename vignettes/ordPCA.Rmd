@@ -188,7 +188,7 @@ lam_p4 <- (lambda)[which.max(apply(ehd_CV_p4$VAFtest,2,mean))]
 ehd_pca_p1 <- ordPCA(H, p=3, lambda=lam_p1, Ks=apply(H,2,max), constr=rep(TRUE,ncol(H)))
 ehd_pca_p3 <- ordPCA(H, p=3, lambda=lam_p1, Ks=apply(H,2,max), constr=rep(TRUE,ncol(H)))
 ehd_pca_p4 <- ordPCA(H, p=4, lambda=lam_p1, Ks=apply(H,2,max), constr=rep(TRUE,ncol(H)))
-=======
+
 ```
 
 

@@ -60,10 +60,10 @@ predictors}. International Statistical Review, 77, 345-365.
 Gertheiss, J. and G. Tutz (2010). \emph{Sparse modeling of categorial explanatory
 variables}. The Annals of Applied Statistics, 4, 2150-2180.
 
-Hoshiyar, A. (2020). \emph{Analyzing Likert-type data using penalized non-linear principal components analysis}, in: Proceedings of the 35th International Workshop on Statistical Modelling, Vol. I, 337-340.
-
 Hoshiyar, A., H.A.L. Kiers, and J. Gertheiss (2021). \emph{Penalized non-linear principal components analysis for ordinal variables with an application to international classification of functioning core sets},  British Journal of Mathematical and Statistical Psychology, 76, 353-371.
 
+Hoshiyar, A., Gertheiss, L.H., Spiller, A. and Gertheiss, J. (2023). \emph{Regularization and    Model Selection for Item-on-Items Regression with Applications to Food Products' Survey Data.}   Preprint on Arxiv.
+  
 Tutz, G. and J. Gertheiss (2014). \emph{Rating scales as predictors -- the old
 question of scale level and some answers}. Psychometrica, 79, 357-376.
   

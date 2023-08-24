@@ -50,8 +50,8 @@ library(ordPens)
 These functions fit penalized dummy coefficients of ordinally scaled independent variables. 
 The covariates are assumed to take values 1,2,...,max, where max denotes the (columnwise) highest level observed in the data. The `ordSmooth()` function penalizes __the sum of squared__ differences of adjacent dummy coefficients, while `ordSelect()` uses a __group lasso__ penalty on differences of adjacent dummies and `ordFusion()` proceeds with a __fused lasso__ penalty on differences of adjacent dummy coefficients __using the glmpath algorithm__. For details on the different penalties used, please see also Tutz and Gertheiss (2014, 2016).
  
-`ordPens` extends penalization to the wider framework of generalized linear models, thus allowing for binary or Poisson distributed responses as well as the classical Gaussian model.  
-The response vector `y` can be either of numeric scale (leading to the default `model = "linear"`), 0/1 coded (`model = "logit"`) or contain count data (i.e. `model = "poisson"`). 
+`ordPens` extends penalization to the wider framework of generalized linear models, thus allowing for binary, ordinal or Poisson distributed responses as well as the classical Gaussian model.  
+The response vector `y` can be either of numeric scale (leading to the default `model = "linear"`), 0/1 coded (`model = "logit"`), ordinal (`model = "cumulative"`) or contain count data (i.e. `model = "poisson"`). 
 
 ### Smoothing
  

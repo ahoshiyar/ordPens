@@ -30,14 +30,14 @@ The stability path then shows the order of relevance of the predictors according
 \value{
     \item{Pi}{the matrix of estimated selection probabilities. Columns correspond to 
     different lambda values, rows correspond to covariates.}
-    \item{mSize}{matrix of size \code{n_iter} \eqn{\times} length(\code{lambda}) containing the corresponding model size.}
+    \item{mSize}{matrix of size \code{n_iter} \eqn{x} length(\code{lambda}) containing the corresponding model size.}
 }
 
 
 \references{
+Hoshiyar, A., Gertheiss, L.H., Spiller, A. and Gertheiss, J. (2023). \emph{Regularization and Model Selection for Item-on-Items Regression with Applications to Food Products' Survey Data.} Preprint on Arxiv.
 
-Meinshausen, N. and Buehlmann, P. (2010). \emph{Stability selection}, Journal of the Royal Statis-
-tical Society B (Statistical Methodology), 72, 417-473.
+Meinshausen, N. and Buehlmann, P. (2010). \emph{Stability selection}, Journal of the Royal Statistical Society B (Statistical Methodology), 72, 417-473.
 }
 
 \author{Aisouda Hoshiyar}

@@ -86,6 +86,8 @@ ordSelect(x, y, u = NULL, z = NULL, offset = rep(0,length(y)), lambda,
   classification of functioning core sets}.
   Journal of the Royal Statistical Society C (Applied Statistics), 60, 377-395.
   
+  Hoshiyar, A., Gertheiss, L.H., Spiller, A. and Gertheiss, J. (2023). \emph{Regularization and    Model Selection for Item-on-Items Regression with Applications to Food Products' Survey Data.}   Preprint on Arxiv.
+    
   Meier, L., S. van de Geer and P. Buehlmann (2008). \emph{The
   group lasso for logistic regression}. Journal of the Royal
   Statistical Society B, 70, 53-71.

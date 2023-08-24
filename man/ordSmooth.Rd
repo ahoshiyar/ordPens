@@ -83,6 +83,7 @@ ordSmooth(x, y, u = NULL, z = NULL, offset = rep(0,length(y)), lambda,
     reference category) as well as metric predictors. Columns correspond to 
     different lambda values.}
   \item{model}{the type of the fitted model: "linear", "logit", or "poisson".}
+  \item{restriction}{the type of restriction used for identifiability.}
   \item{lambda}{the used lambda values.}
   \item{fraction}{the used fraction values (\code{NULL} in case of \code{ordSmooth}).}
   \item{xlevels}{a vector giving the number of levels of the ordinal predictors.}
@@ -103,7 +104,7 @@ Tutz, G. and J. Gertheiss (2014). \emph{Rating scales as predictors -- the old
 Tutz, G. and J. Gertheiss (2016). \emph{Regularized regression for categorical data}. Statistical Modelling, 16, 161-200. 
 }
 
-\author{Jan Gertheiss}
+\author{Jan Gertheiss, Aisouda Hoshiyar}
 
 \seealso{\code{\link{plot.ordPen}}, \code{\link{predict.ordPen}}}
 

@@ -156,7 +156,7 @@ ordFusion <- function(x, y, u = NULL, z = NULL, offset = rep(0,length(y)), lambd
                           family="cumulative", link="logit", ...) 
     nloglik <- - flmodel$loglik
     
-    constant <- t(flmodel$coefs[,1:q, drop=F])  
+    constant <- constrefcat <- t(flmodel$coefs[,1:q, drop=F])  
     xc <- - t(flmodel$coefs[,-(1:q), drop=F])  
   }
   else
@@ -238,6 +238,7 @@ ordFusion <- function(x, y, u = NULL, z = NULL, offset = rep(0,length(y)), lambd
     }
     xcoefs[sequence(kx)>1,] <- transcoef 
     xcoefs[sequence(kx)==1,] <- transb1 
+    if(model == "cumulative") constant <- sweep(constant, 2, apply(transb1,2,sum), "+")
   }
   
   if(model == "cumulative")
@@ -248,7 +249,7 @@ ordFusion <- function(x, y, u = NULL, z = NULL, offset = rep(0,length(y)), lambd
     rownames(coefs) <- c(xnames, thetanames)
     
     flmodel$lambda <- flmodel$lambdaVals*length(y); flmodel$model <- "cumulative"; flmodel$xlevels <- kx; flmodel$zcovars <- 0; class(flmodel) <- "ordPen"; flmodel$restriction <- "refcat"
-    flmodel$coefficients <- rbind(xcrefcat, constant)  
+    flmodel$coefficients <- rbind(xcrefcat, constrefcat)  
     fits <- predict(flmodel, newx = xord, type = "response", ...) 
     colnames(coefs) <- lmbd
  

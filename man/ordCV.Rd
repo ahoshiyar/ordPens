@@ -1,6 +1,6 @@
 \name{ordCV}
 \alias{ordCV}
-\title{Cross Validation for penalized regression with ordinal predictors.}
+\title{Cross-validation for penalized regression with ordinal predictors.}
 \description{Performs k-fold cross-validation in order to evaluate the performance and/or select an optimal smoothing parameter of a penalized regression model with ordinal predictors.}
 
 \usage{
@@ -51,10 +51,13 @@ ordCV(x, y, u = NULL, z = NULL, k=5, lambda, offset = rep(0,length(y)),
 
 \value{
 Returns a list containing the following components:
-  \item{Train}{matrix of size (k x \code{length(lambda)}) containing brier/deviance scores on the training data. }
+  \item{Train}{matrix of size (\code{k} \eqn{x} \code{length(lambda)}) containing brier/deviance scores on the training data. }
   \item{Test}{Brier/deviance score matrix when looking at the test data set.}
 }
- 
+
+\references{
+  Hoshiyar, A., Gertheiss, L.H., Spiller, A. and Gertheiss, J. (2023). \emph{Regularization and     Model Selection for Item-on-Items Regression with Applications to Food Products' Survey Data.}    Preprint on Arxiv.
+} 
 
 \author{Aisouda Hoshiyar}
 
