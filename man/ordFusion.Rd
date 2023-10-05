@@ -72,7 +72,7 @@ ordFusion(x, y, u = NULL, z = NULL, offset = rep(0,length(y)), lambda,
   Gertheiss, J. and G. Tutz (2010). \emph{Sparse modeling of categorial explanatory
   variables}. The Annals of Applied Statistics, 4, 2150-2180.
 
-  Hoshiyar, A., Gertheiss, L.H., Spiller, A. and Gertheiss, J. (2023). \emph{Regularization and    Model Selection for Item-on-Items Regression with Applications to Food Products' Survey Data.}   Preprint on Arxiv.
+  Hoshiyar, A., Gertheiss, L.H., and Gertheiss, J. (2023). \emph{Regularization and    Model Selection for Item-on-Items Regression with Applications to Food Products' Survey Data.}  Preprint, available from https://arxiv.org/abs/2309.16373.
   
   Park, M.Y. and T. Hastie (2007). \emph{L1 regularization path algorithm for 
   generalized linear models}. Journal of the Royal Statistical Society B, 69, 659-677.

@@ -35,7 +35,7 @@ The stability path then shows the order of relevance of the predictors according
 
 
 \references{
-Hoshiyar, A., Gertheiss, L.H., Spiller, A. and Gertheiss, J. (2023). \emph{Regularization and Model Selection for Item-on-Items Regression with Applications to Food Products' Survey Data.} Preprint on Arxiv.
+Hoshiyar, A., Gertheiss, L.H., and Gertheiss, J. (2023). \emph{Regularization and Model Selection for Item-on-Items Regression with Applications to Food Products' Survey Data.} Preprint, available from https://arxiv.org/abs/2309.16373.
 
 Meinshausen, N. and Buehlmann, P. (2010). \emph{Stability selection}, Journal of the Royal Statistical Society B (Statistical Methodology), 72, 417-473.
 }

@@ -445,7 +445,7 @@ See also Sweeney et al. (2015) for a more detailed analysis on several publicly 
 
 * Gertheiss, J. and F. Oehrlein (2011). Testing relevance and linearity of ordinal predictors. *Electronic Journal of Statistics 5*, 1935-1959.
 
-* Gertheiss, J., F. Scheipl, T. Lauer, and H. Ehrhardt (2021). Statistical inference for ordinal predictors in generalized linear and additive models with application to bronchopulmonary dysplasia. Preprint, available from https://arxiv.org/abs/2102.01946.
+* Gertheiss, J., F. Scheipl, T. Lauer, and H. Ehrhardt (2022). Statistical inference for ordinal predictors in generalized linear and additive models with application to bronchopulmonary dysplasia. *BMC research notes 15*, 112.  
 
 * Greven, S., C. Crainiceanu, H. Kuechenhoff, and A. Peters (2008). Restricted likelihood ratio testing for zero variance components in linear mixed models. *Journal of Computational and Graphical Statistics 17*, 870-891.
 

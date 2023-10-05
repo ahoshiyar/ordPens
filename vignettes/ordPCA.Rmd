@@ -325,7 +325,7 @@ axis(1, at = 1:length(icf_pca1$qs[[j]][,1]),
 
 * Hoshiyar, A. (2020). Analyzing Likert-type data using penalized non-linear principal components analysis. In: *Proceedings of the 35th International Workshop on Statistical Modelling I*, 337-340.
 
-* Hoshiyar, A., H.A.L. Kiers, and J. Gertheiss (2021). Penalized non-linear principal components analysis for ordinal variables with an application to international classification of functioning core sets, Preprint.
+* Hoshiyar, A., H.A.L. Kiers, and J. Gertheiss (2021). Penalized non-linear principal components analysis for ordinal variables with an application to international classification of functioning core sets. *British Journal of Mathematical and Statistical Psychology 76*, 353-371.
 
 * Jouvent, R., C. Vindreau, M. Montreuil, C. Bungender, and D. Windlocher (1988). La clinique polydimensionnelle de humeur depressive: Nouvelle version echelle ehd. *Psychiatrie et Psychobiologie 3*, 245–254.  
 

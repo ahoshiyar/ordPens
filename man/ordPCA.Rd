@@ -68,7 +68,7 @@ However, VAF values are stored in \code{VAFtrain} or \code{VAFtest} and can be a
 \references{
 Hoshiyar, A. (2020). \emph{Analyzing Likert-type data using penalized non-linear principal components analysis}, in: Proceedings of the 35th International Workshop on Statistical Modelling, Vol. I, 337-340.
 
-Hoshiyar, A., H.A.L. Kiers, and J. Gertheiss (2021). \emph{Penalized non-linear principal components analysis for ordinal variables with an application to international classification of functioning core sets}, Preprint.
+Hoshiyar, A., H.A.L. Kiers, and J. Gertheiss (2021). \emph{Penalized non-linear principal components analysis for ordinal variables with an application to international classification of functioning core sets}, British Journal of Mathematical and Statistical Psychology, 76, 353-371.
 
 Linting, M., J.J. Meulmann, A.J. von der Kooji, and P.J.F. Groenen (2007). 
 \emph{Nonlinear principal components analysis: Introduction and application}, 

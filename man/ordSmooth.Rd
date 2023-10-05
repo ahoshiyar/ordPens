@@ -91,9 +91,9 @@ ordSmooth(x, y, u = NULL, z = NULL, offset = rep(0,length(y)), lambda,
   \item{zcovars}{the number of metric covariates (if any).}
 }
 \references{
-Gertheiss, J., F. Scheipl, T. Lauer, and H. Ehrhardt (2021). \emph{Statistical 
+Gertheiss, J., F. Scheipl, T. Lauer, and H. Ehrhardt (2022). \emph{Statistical 
 inference for ordinal predictors in generalized linear and additive models with
-application to bronchopulmonary dysplasia}. Preprint, available from https://arxiv.org/abs/2102.01946. 
+application to bronchopulmonary dysplasia}. BMC research notes, 15, 112.
 
 Gertheiss, J. and G. Tutz (2009). \emph{Penalized regression with ordinal 
 predictors}. International Statistical Review, 77, 345-365.

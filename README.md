@@ -20,7 +20,7 @@ For smoothing, selection and fusion, details may be found in Tutz and
 Gertheiss (2014, 2016). All functions are documented in detail in
 `vignette("ordPens", package = "ordPens")`. For smoothing only, the
 package also builds a bridge to `mgcv::gam()`, see Gertheiss et
-al. (2021) for further information.
+al. (2022) for further information.
 
 For the function implementing nonlinear principal components analysis,
 `ordPCA`, details can be found in Hoshiyar et al. (2021) and
@@ -95,10 +95,10 @@ By contributing to this project, you agree to abide by its terms.
     *Journal of Agricultural, Biological and Environmental Statistics
     19*, 258-277.
 
--   Gertheiss, J., F. Scheipl, T. Lauer, and H. Ehrhardt (2021).
+-   Gertheiss, J., F. Scheipl, T. Lauer, and H. Ehrhardt (2022).
     Statistical inference for ordinal predictors in generalized linear
     and additive models with application to bronchopulmonary dysplasia.
-    Preprint, available from <https://arxiv.org/abs/2102.01946>.
+    *BMC research notes 15*, 112.
 
 -   Hoshiyar, A., H.A.L. Kiers, and J. Gertheiss (2021). Penalized
     non-linear principal components analysis for ordinal variables with
@@ -106,9 +106,10 @@ By contributing to this project, you agree to abide by its terms.
     sets. *British Journal of Mathematical and Statistical Psychology
     76*, 353-371.
 
--   Hoshiyar, A., Gertheiss, L.H., Spiller, A. and Gertheiss, J. (2023). 
-    Regularization and Model Selection for Item-on-Items Regression with 
-    Applications to Food Products' Survey Data. *Preprint on Arxiv*.
+-   Hoshiyar, A., Gertheiss, L.H., and Gertheiss, J. (2023).
+    Regularization and model selection for item-on-items regression with
+    applications to food products’ survey data. Preprint, available from
+    <https://arxiv.org/abs/2309.16373>.
 
 -   Sweeney, E., C. Crainiceanu, and J. Gertheiss (2015). Testing
     differentially expressed genes in dose-response studies and with
