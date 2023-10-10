@@ -6,3 +6,9 @@
 ^CRAN-RELEASE$
 ^doc$
 ^Meta$
+^CRAN-SUBMISSION$
+^paper$
+^contributing\.md$
+^references\.bib$
+^LICENSE$
+

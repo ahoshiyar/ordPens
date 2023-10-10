@@ -5,3 +5,7 @@
 ordPens.Rproj
 /doc/
 /Meta/
+^contributing.md
+^references.bib
+^paper/
+^LICENSE$
