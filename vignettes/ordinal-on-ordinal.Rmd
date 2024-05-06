@@ -1,0 +1,261 @@
+---
+title: "Ordinal-on-ordinal Regression"
+author: "Aisouda Hoshiyar"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette 
+vignette: >
+  %\VignetteIndexEntry{Ordinal-on-ordinal Regression}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<style>
+body {
+text-align: justify}
+</style>
+
+
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",  
+  out.extra = 'style="border:0; margin: auto"', 
+fig.width=5,
+fig.height=5,
+out.width="400px",  
+out.height="400px"  
+)
+```
+
+
+A strategy for smoothing and selection of ordinally scaled predictors in the cumulative logit model is proposed. The original group lasso is modified by use of difference penalties on neighbouring dummy coefficients, thus taking into account the predictors’ ordinal structure. Further, a fused lasso type penalty is presented for fusion of predictor categories and factor selection. 
+
+## Functions used 
+* __ordFusion__
+* __ordSelect__
+* __ordCV__
+* __StabilityCumu__
+
+The `ordPens` R package offers selection, and/or smoothing/fusion of ordinally scaled independent variables using a group lasso or generalized ridge penalty. In addition, nonlinear principal components analysis for ordinal variables is provided, using a second-order difference penalty.
+
+Smoothing and selection of ordinal predictors is done by the function `ordSelect()`; fusion and selection of ordinal predictors by `ordFusion()`. For other methods available see also `vignette("ordPens", package = "ordPens")` and `vignette("ordPCA", package = "ordPens")`.
+
+```{r setup, results="hide", warning=FALSE,message=FALSE}
+library(ordPens) 
+```
+
+## Fusion, smoothing and selection
+
+These functions fit penalized dummy coefficients of ordinally scaled independent variables. 
+The covariates are assumed to take values 1,2,...,max, where max denotes the (columnwise) highest level observed in the data. The `ordSelect()` function uses a __group lasso__ penalty on differences of adjacent dummies and `ordFusion()` proceeds with a __fused lasso__ penalty on differences of adjacent dummy coefficients __using the glmpath algorithm__. For details on the different penalties used, please see also Tutz and Gertheiss (2014, 2016).
+ 
+`ordPens` extends penalization to the wider framework of generalized linear models, thus allowing for binary, ordinal or Poisson distributed responses as well as the classical Gaussian model.  
+The response vector `y` can be either of numeric scale (leading to the default `model = "linear"`), 0/1 coded (`model = "logit"`), ordinal (`model = "cumulative"`) or contain count data (i.e. `model = "poisson"`). 
+
+
+### Smoothing and Selection
+
+When many predictors are available, selecting the, possibly few, relevant ones is of particular interest.
+Joint selection and smoothing is achieved by a ordinal group lasso penalty, where the $L_2$-norm is modified by squared differences. 
+While the ridge penalty (for smoothing only) shrinks the coefficients of correlated predictors towards each other, the (ordinal) group lasso additionally tends to select one or some of them and discard the others.  
+For more information on the original group lasso (for nominal predictors and grouped variables in general), cf. Meier et. al (2008).
+
+The tuning parameter $\lambda$ controls the overall strength of the penalty.
+If $\lambda = 0$ one obtains the usual un-penalized coefficient estimates. 
+If $\lambda \to \infty$ coefficients are enforced to shrink towards 0.
+For $0 < \lambda < \infty$ parameters corresponding to adjacent categories are enforced to obtain similar values, as it is sensible to assume that coefficients vary smoothly over ordinal categories.
+
+### Fusion and Selection
+
+If a variable is selected by the group lasso, all coefficients belonging to that selected covariate are estimated as differing (at least slightly). However, it might be useful to collapse certain categories. Clustering is done by a fused lasso type penalty using the $L_1$-norm on adjacent categories. 
+That is, adjacent categories get the same coefficient values and one obtains clusters of categories.
+The fused lasso also enforces selection of predictors: since the parameters of the reference categories are set to zero, a predictor is excluded if all its categories are combined into one cluster.
+
+#### Spending on Luxury Food 
+
+We consider a survey concerning, among other things, the consumer's willingness to pay for 'luxury food' (Hartmann et al., 2016, 2017). The part of the dataset we examine consists of 821 observations of 44 Likert-type items on personal luxury food definitions, eating and shopping habits, diet styles, and food price sensitivities. Our response of interest is whether participants would be willing to pay a higher price for a food product that they associate with luxury, measured on the ordinal −2 to +2 scale. The subset of the data that is analyzed here has been made publicly available at https://zenodo.org/record/8383248 (Hoshiyar et al., 2023a).
+An overview of the coding scheme of all items is found there as well. 
+
+```{r, eval=TRUE, echo=FALSE}
+if (!requireNamespace("readr", quietly = TRUE)) install.packages("readr")
+suppressWarnings(library(readr))
+```
+
+```{r}
+zenodo_url <- "https://zenodo.org/records/8383248/files/luxury_food.csv?download=1"
+data_path <- "luxury_food.csv"
+download.file(zenodo_url, destfile = data_path, mode = "wb")
+
+luxdat <- read.table(file='luxury_food.csv', header=TRUE, sep=';') 
+head(luxdat)
+```
+
+ 
+Before estimation, we make sure that the ordinal design matrix is coded adequately:
+```{r} 
+x <- luxdat[,1:43] 
+x[,-c(10:15)] <- x[,-c(10:15)] + 3
+y <- luxdat[,44] + 3
+
+ 
+xnames <- colnames(x)
+head(x)
+```
+
+We can check whether all categories are observed at least once as follows: 
+```{r}
+rbind(apply(x, 2, min), apply(x, 2, max))
+```
+
+If some covariates not all possible levels are observed at least once, the easiest way is to add a corresponding row to x with corresponding y value being NA to ensure a corresponding coefficient is to be fitted.
+
+Now, let's demonstrate and compare both methods for the cumulative logit model.   
+ 
+The syntax of the two functions is very similar, type also `?ordSelect` or `?ordFusion`.
+
+```{r} 
+osl <- ordSelect(x = x, y = y, lambda = c(14.5,10,5,1,0.25), model = "cumulative", 
+                 restriction = "effect")
+ofu <- ordFusion(x = x, y = y, lambda = c(18.5,10,5,1,0.25), model = "cumulative", 
+                 restriction = "effect")
+```
+
+The fitted `ordPen` object contains the fitted coefficients and can be visualized by the generic `plot` function. Let us illustrate the fitted coefficients for some covariates for different values of $\lambda$ (larger values being associated with the darker curves). We can use `axis()` to replace the integers 1,2,... used for fitting with the original levels:  
+```{r test, figures-side, fig.show="hold", fig.cap="Left column: smoothing and selection; right column: fusion.", fig.width = 3.25, fig.height = 3.25, out.width="33%",out.height="33%"}
+wx <- which(xnames=="v_1074"|xnames=="v_1076"|xnames=="v_1102"|xnames=="v_1106"|xnames=="v_623"
+            |xnames=="v_624") 
+xmain <- c()
+xmain[wx] <- c("Cooking","Expensive restaurants", "Vegan", "Low-fat diet", "Impressing guests",
+               "High quality") 
+ 
+# par(mar = c(4.1, 4.1, 3.1, 1.1))  
+for(i in wx){
+  plot(osl, whx = i, main = xmain[i], xaxt = "n", ylim=c(-1,1.25))
+  axis(1, at = 1:osl$xlevels[i], labels = -2:2)   
+  
+  plot(ofu, whx = i, main = "", xaxt = "n", ylim=c(-1,1.25))
+  axis(1, at = 1:osl$xlevels[i], labels = -2:2)   
+}
+```
+
+The vector of penalty parameters `lambda` is sorted decreasingly and each curve corresponds to a $\lambda$ value, with larger values being associated with the darker colors.
+
+For smaller $\lambda$ it is seen that the coefficients are more wiggly, while differences of adjacent categories are more and more shrunk when $\lambda$ increases, which yields smoother coefficients.
+
+It is seen, for example, that variables *Cooking* (row 1) is excluded by `ordSelect()` for $\lambda \geq 5$, whereas `ordFusion()` yields fused dummy estimates for *Cooking*, clustering levels 1-3 for $\lambda = 5$ and excluding the variable for $\lambda \geq 10$:
+```{r}
+xgrp <- rep(1:43, apply(x, 2, max))
+
+osl_coefs <- osl$coef[1:(length(xgrp)),, drop = FALSE]
+ofu_coefs <- ofu$coef[1:(length(xgrp)),, drop = FALSE]
+
+round(osl_coefs[xgrp == wx[1],, drop = FALSE] ,3)
+round(ofu_coefs[xgrp == wx[1],, drop = FALSE] ,3)
+```
+
+Note that a penalty using first-order differences, as applied here for smoothing/selection/fusion, always fuses the outer levels if observations are missing. 
+
+In general, `ordFusion()` yields estimates that tend to be flat over adjacent categories, which represents a specific form of smoothness.
+With the fused lasso, all categories are fused and excluded at some point with increasing lambda, which can be viewed from the matrix of estimated coefficients (not printed here):
+
+```{r, results = "hide"}
+round(osl$coefficients, digits = 3)
+round(ofu$coefficients, digits = 3)
+```
+ 
+Now, let’s plot the path of coefficients against the log-lambda value (for the variables shown here):
+```{r coef_path2, figures-side, fig.show="hold", fig.cap="Paths of coefficients as functions of the tuning parameter."} 
+# lambda values
+lambda <- c(500,200,100,70,50,30,15,5,1)  
+
+osl2 <- ordSelect(x = x, y = y, lambda = lambda, model ="cumulative", restriction = "effect")
+ofu2 <- ordFusion(x = x, y = y, lambda = lambda, model ="cumulative", restriction = "effect")
+
+idx <- which(xgrp==wx[1] | xgrp==wx[2] | xgrp==wx[3] | xgrp==wx[4] | xgrp==wx[5] | xgrp==wx[6])
+
+matplot(log(lambda), t(osl2$coefficients[idx,]), type = "l", xlab = expression(log(lambda)), 
+        ylab = "Coefficients", col = c(1, rep(2,8), rep(3,6), rep(4,7)), cex.main = 1, 
+        main = "Selection",  xlim = c(max(log(lambda)), min(log(lambda))))
+axis(4, at = osl2$coefficients[idx,ncol(osl2$coefficients)], line = -.5, las = 1, 
+     label = rownames(osl2$coefficients[idx,]), tick = FALSE, cex.axis = 0.5)
+
+matplot(log(lambda), t(ofu2$coefficients[idx,]), type = "l", xlab = expression(log(lambda)), 
+        ylab = "Coefficients", col = c(1, rep(2,8), rep(3,6), rep(4,7)), cex.main = 1, 
+        main = "Fusion", xlim = c(max(log(lambda)), min(log(lambda))))
+axis(4, at = ofu2$coefficients[idx,ncol(ofu2$coefficients)], line = -.5, las = 1, 
+     label = rownames(ofu2$coefficients[idx,]), tick = FALSE, cex.axis = 0.5)
+```
+
+Each curve corresponds to a dummy coefficient and each color corresponds to a variable (intercept not penalized here). The effect of the different penalties can be seen very clearly.
+ 
+ 
+
+#### k-fold Cross Validation
+
+For selecting the right amount of penalization, it is suggested to perform k-fold cross validation over a fine grid of (many) sensible values $\lambda$. 
+```{r, echo=TRUE, eval=FALSE}
+lamG <- seq(100,2,length=200)
+set.seed(1234)
+cv_fus <- ordCV(x, y, lambda = lamG, model = c("cumulative"), type = "fusion") 
+``` 
+
+The optimal $\lambda$ can then be determined by the value maximizing the cross-validated VAF on the validation set, averaged over folds:
+```{r, eval=TRUE, echo=FALSE}  
+cv_fus <- readRDS("cv_fus.rds")
+lamG <- seq(100,2,length=200)
+``` 
+
+```{r cv, figures-side, fig.show="hold", fig.cap="Brier score with fusion penalty (averaged over folds).", fig.width = 5, fig.height = 5, out.width="45%",out.height="50%"}  
+plot(log10((lamG/length(y))), apply(cv_fus$Train,2,mean) , type="l",    
+     xlab= expression(log[10](lambda)) 
+     , ylab="Brier Score", main = "training data",
+     cex.axis=1.2, cex.lab=1.2 ) 
+plot(log10((lamG/length(y))), apply(cv_fus$Test,2,mean) , type="l",    
+     xlab = expression(log[10](lambda)) 
+     , ylab="Brier Score",
+     main = "validation data",
+     cex.axis=1.2, cex.lab=1.2 )
+abline(v=log10((lamG)/length(y))[which.min(apply(cv_fus$Test,2,mean))], lty=2)  
+```
+ 
+#### Stability selection
+
+For high dimensional data, cross-validation techniques can be quite challenging as cross-validated choices may include too many variables. If we are mainly interested in feature selection, we can alternatively apply stability selection as suggested by Meinshausen and Buehlmann (2010), a promising subsampling strategy in combination with high dimensional variable selection. 
+
+Instead of selecting/fitting one model, the data are pertubed/subsampled iter times and we choose those variables that occur in a large fraction of runs. The stability path then shows the order of relevance of the predictors according to stability selection. See also `?Stability.cumu` and Hoshiyar et al. (2023b). 
+
+```{r, eval=FALSE, echo=TRUE}  
+luxury_stab <- Stability.cumu(x, y, lambda, n_iter=100, type="fusion") 
+``` 
+
+The matrix of estimated selection probabilities is given by `$Pi`. Columns correspond to different lambda values, rows correspond to covariates. `$msize` is a matrix of size n_iter x length(lambda) containing the corresponding model size.
+
+## References
+ 
+* Hartmann, L. H., S. Nitzko and A. Spiller (2016). The significance of definitional dimensions of luxury food. *British Food Journal 118*, 1976–1998.
+
+* Hartmann, L. H., Nitzko, S., and Spiller, A. (2017). Segmentation of german consumers based on perceived dimensions of luxury food. *Journal of Food Products Marketing 23*, 733–768.
+
+* Hoshiyar, A., L. Gertheiss and J. Gertheiss (2023a). Spending on luxury food. *Zenodo. URL https://zenodo.org/record/8383248*.
+ 
+* Hoshiyar, A., L.H. Gertheiss and J. Gertheiss (2023b). Regularization and Model Selection for Item-on-Items Regression with Applications to Food Products' Survey Data. *Preprint, available from https://arxiv.org/abs/2309.16373*.
+
+* Meier, L., S. van de Geer and P. Buehlmann (2008). The group lasso for logistic regression. *Journal of the Royal Statistical Society B 70*, 53-71.
+
+* Meinshausen, N. and P. Buehlmann (2010). Stability selection. *Journal of the Royal Statistical Society B 72*, 417–473.
+
+* Tibshirani, R., M. Saunders, S. Rosset, J. Zhu and K. Knight (2005). Sparsity and smoothness via the fused lasso. *Journal of the Royal Statistical Society B 67*, 91–108.
+ 
+* Tutz, G. and J. Gertheiss (2014). Rating scales as predictors – the old question of scale level and some answers. *Psychometrica 79*, 357-376.
+
+* Tutz, G. and J. Gertheiss (2016). Regularized regression for categorical data. *Statistical Modelling 16*, 161-200.
+ 
+* Wurm, M. J., P. J. Rathouz and  B. M. Hanlon (2021). Regularized ordinal regression and the ordinalNet R package. *Journal of Statistical Software 99*, 1–42.
+ 
+
+
+
+
+
+  
